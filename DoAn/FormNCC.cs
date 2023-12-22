@@ -135,32 +135,41 @@ namespace DoAn
             CheckInputTxt();
             if (!checkError)
             {
-                conn.Open();
-                string QuerryCheckMa = "select MaCT from dbo.CongTy where MaCT = '" + txtMaCT.Text + "'";
-                SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                SqlDataReader dta = cmd.ExecuteReader();
-                if (dta.Read() == true && txtMaCT.Text != dtgNCC.Rows[numrow].Cells[0].Value.ToString())
+                if (checkClickdtg)
                 {
-                    ErrorWarning(errorProvider1, txtMaCT, "Mã công ty đã tồn tại");
-                    conn.Close();
+                    checkClickdtg = false;
+                    conn.Open();
+                    string QuerryCheckMa = "select MaCT from dbo.CongTy where MaCT = '" + txtMaCT.Text + "'";
+                    SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
+                    SqlDataReader dta = cmd.ExecuteReader();
+                    if (dta.Read() == true && txtMaCT.Text != dtgNCC.Rows[numrow].Cells[0].Value.ToString())
+                    {
+                        ErrorWarning(errorProvider1, txtMaCT, "Mã công ty đã tồn tại");
+                        conn.Close();
+                    }
+                    else
+                    {
+                        conn.Close();
+                        conn.Open();
+                        string QuerryUpdate = " Update dbo.CongTy set MaCT = '" + txtMaCT.Text + "',TenCT = N'" + txtTenCT.Text + "',DiaChiCT =N'" + txtDiaChiCT.Text + "',DienThoaiCT = N'" + txtDienThoaiCT.Text + "'," +
+                            "Email=N'" + txtEmail.Text + "',Website = N'" + txtWebsite.Text + "',Bank=N'" + txtBank.Text + "',GhiChu=N'" + txtGhiChu.Text + "' where MaCT = '" + dtgNCC.Rows[numrow].Cells[0].Value.ToString() + "'";
+                        SqlCommand cmd1 = new SqlCommand(QuerryUpdate, conn);
+                        cmd1.ExecuteNonQuery();
+                        conn.Close();
+                        conn.Open();
+                        string QuerrySelect = "select *  from dbo.CongTy";
+                        SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd2);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        dtgNCC.DataSource = dt;
+                        conn.Close();
+                    }
                 }
                 else
                 {
-                    conn.Close();
-                    conn.Open();
-                    string QuerryUpdate = " Update dbo.CongTy set MaCT = '" + txtMaCT.Text + "',TenCT = N'" + txtTenCT.Text + "',DiaChiCT =N'" + txtDiaChiCT.Text + "',DienThoaiCT = N'" + txtDienThoaiCT.Text + "'," +
-                        "Email=N'" + txtEmail.Text + "',Website = N'" + txtWebsite.Text + "',Bank=N'" + txtBank.Text + "',GhiChu=N'" + txtGhiChu.Text + "' where MaCT = '" + dtgNCC.Rows[numrow].Cells[0].Value.ToString() + "'";
-                    SqlCommand cmd1 = new SqlCommand(QuerryUpdate, conn);
-                    cmd1.ExecuteNonQuery();
-                    conn.Close();
-                    conn.Open();
-                    string QuerrySelect = "select *  from dbo.CongTy";
-                    SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
-                    SqlDataAdapter da = new SqlDataAdapter(cmd2);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dtgNCC.DataSource = dt;
-                    conn.Close();
+                    MessageBox.Show("Chưa chọn dòng để sửa", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ResetTextBox();
                 }
             }
         }

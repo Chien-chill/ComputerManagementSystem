@@ -206,7 +206,7 @@ namespace DoAn
                 conn.Close();
                 conn.Open();
                 string QuerryUpdate = " Update dbo.MayTinh set MaMT = N'" + txtMaMayTinh.Text + "',TenMT = N'" + txtTenMayTinh.Text + "',TenHSX = N'"+ txtTenHSX.Text +"',LoaiHang = N'"+cboLoaiHang.Text+"',BaoHanh = "+int.Parse(txtBaoHanh.Text)+",NamRaMat =" +
-              int.Parse(txtNamRaMat.Text) + ",CPU = N'"+txtCPU.Text+"',RAM1 = '"+ cboRAM1.Text+"',RAM2 = '"+cboRAM2.Text+"', ManHinh = N'"+txtManHinh.Text+"',DungLuong = '" + txtDungLuong.Text +"',TrongLuong = "+ double.Parse(txtTrongLuong.Text)+",DonGia ="+
+              int.Parse(txtNamRaMat.Text) + ",CPU = N'"+txtCPU.Text+"',RAM1 = '"+ cboRAM1.Text+"',RAM2 = '"+cboRAM2.Text+"', ManHinh = '"+txtManHinh.Text+"',DungLuong = '" + txtDungLuong.Text +"',TrongLuong = "+ double.Parse(txtTrongLuong.Text)+",DonGia ="+
             double.Parse(txtDonGia.Text)+",GhiChu = N'" +txtGhiChu.Text+"',Card =N'"+txtCard.Text+"',TinhTrang = N'"+cboTinhTrang.Text+"' where  MaMT = N'" + dtgMayTinh.Rows[numrow].Cells[0].Value.ToString() + "'" ;
                 SqlCommand cmd1 = new SqlCommand(QuerryUpdate, conn);
                 cmd1.ExecuteNonQuery();

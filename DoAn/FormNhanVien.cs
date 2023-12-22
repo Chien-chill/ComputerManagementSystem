@@ -395,30 +395,40 @@ namespace DoAn
                 }
                 else
                 {
-                    conn.Close();
-                    string GioiTinh = string.Empty;
-                    if (radNam.Checked == true)
+                    if (checkClickdtg)
                     {
-                        GioiTinh = "Nam";
+                        checkClickdtg = false;
+                        conn.Close();
+                        string GioiTinh = string.Empty;
+                        if (radNam.Checked == true)
+                        {
+                            GioiTinh = "Nam";
+                        }
+                        else if (radNu.Checked == true)
+                        {
+                            GioiTinh = "Nữ";
+                        }
+                        conn.Open();
+                        string QuerryUpdate = " Update dbo.NhanVien set MaNV = '" + txtMaNV.Text + "',TenNV = N'" + txtTenNV.Text + "',CCCD ='" + txtCCCD.Text + "',GioiTinhNV =N'" + GioiTinh + "',NgaySinhNV ='" + dtpNgaySinh.Value.ToShortDateString() + "',DiaChiNV =N'" + txtDiaChi.Text + "',DienThoaiNV = N'" + txtDienThoai.Text + "'," +
+                            "Bank=N'" + txtBank.Text + "',GhiChu=N'" + txtGhiChu.Text + "',ChucVu=N'" + txtChucVu.Text + "',Luong =" + double.Parse(txtLuong.Text) + " where MaNV = N'" + dtgNV.Rows[numrow].Cells[0].Value.ToString() + "'";
+                        SqlCommand cmd1 = new SqlCommand(QuerryUpdate, conn);
+                        cmd1.ExecuteNonQuery();
+                        conn.Close();
+                        conn.Open();
+                        string QuerrySelect = "select *  from dbo.NhanVien";
+                        SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd2);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        dtgNV.DataSource = dt;
+                        conn.Close();
                     }
-                    else if (radNu.Checked == true)
+                    else
                     {
-                        GioiTinh = "Nữ";
-                    }
-                    conn.Open();
-                    string QuerryUpdate = " Update dbo.NhanVien set MaNV = '" + txtMaNV.Text + "',TenNV = N'" + txtTenNV.Text + "',CCCD ='" + txtCCCD.Text + "',GioiTinhNV =N'" + GioiTinh + "',NgaySinhNV ='" + dtpNgaySinh.Value.ToShortDateString() + "',DiaChiNV =N'" + txtDiaChi.Text + "',DienThoaiNV = N'" + txtDienThoai.Text + "'," +
-                        "Bank=N'" + txtBank.Text + "',GhiChu=N'" + txtGhiChu.Text + "',ChucVu=N'" + txtChucVu.Text + "',Luong =" + double.Parse(txtLuong.Text) + " where MaNV = N'" + dtgNV.Rows[numrow].Cells[0].Value.ToString() + "'";
-                    SqlCommand cmd1 = new SqlCommand(QuerryUpdate, conn);
-                    cmd1.ExecuteNonQuery();
-                    conn.Close();
-                    conn.Open();
-                    string QuerrySelect = "select *  from dbo.NhanVien";
-                    SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
-                    SqlDataAdapter da = new SqlDataAdapter(cmd2);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dtgNV.DataSource = dt;
-                    conn.Close();
+
+                        MessageBox.Show("Chưa chọn dòng để sửa", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        ResetTextBox();
+                    }    
                 }
             }
         }

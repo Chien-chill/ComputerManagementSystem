@@ -38,7 +38,6 @@
             this.txtMaMT = new System.Windows.Forms.TextBox();
             this.txtMaKH = new System.Windows.Forms.TextBox();
             this.txtSoLuong = new System.Windows.Forms.TextBox();
-            this.txtGiamGia = new System.Windows.Forms.TextBox();
             this.txtMaNV = new System.Windows.Forms.TextBox();
             this.txtMaHD = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -46,17 +45,13 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btnInPhieuHD = new DoAn.VBButton();
-            this.btnXoaHD = new DoAn.VBButton();
             this.label1 = new System.Windows.Forms.Label();
             this.dtpHD = new System.Windows.Forms.DateTimePicker();
             this.tst = new System.Windows.Forms.Label();
-            this.btnSuaHD = new DoAn.VBButton();
             this.lblDateNow = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.lblDateHD = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnThemHD = new DoAn.VBButton();
             this.dtgHD = new System.Windows.Forms.DataGridView();
             this.clnMPN = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clnNLPN = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -71,9 +66,14 @@
             this.clnMNV = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.clnGC = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnBaoCao = new DoAn.VBButton();
             this.pnHD = new System.Windows.Forms.Panel();
+            this.txtDiemTT = new System.Windows.Forms.TextBox();
             this.btnLamMoi = new DoAn.VBButton();
+            this.btnBaoCao = new DoAn.VBButton();
+            this.btnInPhieuHD = new DoAn.VBButton();
+            this.btnXoaHD = new DoAn.VBButton();
+            this.btnSuaHD = new DoAn.VBButton();
+            this.btnThemHD = new DoAn.VBButton();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtgHD)).BeginInit();
             this.panel2.SuspendLayout();
@@ -149,6 +149,7 @@
             this.txtMaKH.Name = "txtMaKH";
             this.txtMaKH.Size = new System.Drawing.Size(253, 26);
             this.txtMaKH.TabIndex = 9;
+            this.txtMaKH.TextChanged += new System.EventHandler(this.txtMaKH_TextChanged);
             // 
             // txtSoLuong
             // 
@@ -157,15 +158,6 @@
             this.txtSoLuong.Name = "txtSoLuong";
             this.txtSoLuong.Size = new System.Drawing.Size(78, 26);
             this.txtSoLuong.TabIndex = 12;
-            // 
-            // txtGiamGia
-            // 
-            this.txtGiamGia.Location = new System.Drawing.Point(50, 474);
-            this.txtGiamGia.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.txtGiamGia.Name = "txtGiamGia";
-            this.txtGiamGia.Size = new System.Drawing.Size(78, 26);
-            this.txtGiamGia.TabIndex = 11;
-            this.txtGiamGia.Text = "0";
             // 
             // txtMaNV
             // 
@@ -225,9 +217,9 @@
             this.label5.Location = new System.Drawing.Point(24, 426);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(147, 26);
+            this.label5.Size = new System.Drawing.Size(161, 26);
             this.label5.TabIndex = 3;
-            this.label5.Text = "Giảm Giá (%):";
+            this.label5.Text = "Điểm thân thiết:";
             // 
             // label2
             // 
@@ -239,58 +231,6 @@
             this.label2.Size = new System.Drawing.Size(106, 26);
             this.label2.TabIndex = 0;
             this.label2.Text = "Ngày bán:";
-            // 
-            // btnInPhieuHD
-            // 
-            this.btnInPhieuHD.BackColor = System.Drawing.Color.SlateBlue;
-            this.btnInPhieuHD.BackgroundColor = System.Drawing.Color.SlateBlue;
-            this.btnInPhieuHD.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnInPhieuHD.BorderRadius = 20;
-            this.btnInPhieuHD.BorderSize = 0;
-            this.btnInPhieuHD.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnInPhieuHD.FlatAppearance.BorderSize = 0;
-            this.btnInPhieuHD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInPhieuHD.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnInPhieuHD.ForeColor = System.Drawing.Color.Black;
-            this.btnInPhieuHD.Image = ((System.Drawing.Image)(resources.GetObject("btnInPhieuHD.Image")));
-            this.btnInPhieuHD.Location = new System.Drawing.Point(939, 14);
-            this.btnInPhieuHD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnInPhieuHD.Name = "btnInPhieuHD";
-            this.btnInPhieuHD.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
-            this.btnInPhieuHD.Size = new System.Drawing.Size(178, 69);
-            this.btnInPhieuHD.TabIndex = 3;
-            this.btnInPhieuHD.Text = "In Phiếu";
-            this.btnInPhieuHD.TextColor = System.Drawing.Color.Black;
-            this.btnInPhieuHD.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnInPhieuHD.UseVisualStyleBackColor = false;
-            this.btnInPhieuHD.Click += new System.EventHandler(this.btnInPhieuHD_Click);
-            // 
-            // btnXoaHD
-            // 
-            this.btnXoaHD.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.btnXoaHD.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.btnXoaHD.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnXoaHD.BorderRadius = 20;
-            this.btnXoaHD.BorderSize = 0;
-            this.btnXoaHD.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnXoaHD.FlatAppearance.BorderSize = 0;
-            this.btnXoaHD.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Cyan;
-            this.btnXoaHD.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
-            this.btnXoaHD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnXoaHD.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXoaHD.ForeColor = System.Drawing.Color.Black;
-            this.btnXoaHD.Image = ((System.Drawing.Image)(resources.GetObject("btnXoaHD.Image")));
-            this.btnXoaHD.Location = new System.Drawing.Point(673, 10);
-            this.btnXoaHD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnXoaHD.Name = "btnXoaHD";
-            this.btnXoaHD.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
-            this.btnXoaHD.Size = new System.Drawing.Size(178, 69);
-            this.btnXoaHD.TabIndex = 2;
-            this.btnXoaHD.Text = "Xoá";
-            this.btnXoaHD.TextColor = System.Drawing.Color.Black;
-            this.btnXoaHD.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnXoaHD.UseVisualStyleBackColor = false;
-            this.btnXoaHD.Click += new System.EventHandler(this.btnXoaHD_Click);
             // 
             // label1
             // 
@@ -327,33 +267,6 @@
             this.tst.TabIndex = 4;
             this.tst.Text = "Số lượng mua:";
             // 
-            // btnSuaHD
-            // 
-            this.btnSuaHD.BackColor = System.Drawing.Color.Yellow;
-            this.btnSuaHD.BackgroundColor = System.Drawing.Color.Yellow;
-            this.btnSuaHD.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnSuaHD.BorderRadius = 20;
-            this.btnSuaHD.BorderSize = 0;
-            this.btnSuaHD.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSuaHD.FlatAppearance.BorderSize = 0;
-            this.btnSuaHD.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Cyan;
-            this.btnSuaHD.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
-            this.btnSuaHD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSuaHD.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSuaHD.ForeColor = System.Drawing.Color.Black;
-            this.btnSuaHD.Image = ((System.Drawing.Image)(resources.GetObject("btnSuaHD.Image")));
-            this.btnSuaHD.Location = new System.Drawing.Point(401, 14);
-            this.btnSuaHD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnSuaHD.Name = "btnSuaHD";
-            this.btnSuaHD.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
-            this.btnSuaHD.Size = new System.Drawing.Size(178, 69);
-            this.btnSuaHD.TabIndex = 1;
-            this.btnSuaHD.Text = "Sửa";
-            this.btnSuaHD.TextColor = System.Drawing.Color.Black;
-            this.btnSuaHD.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnSuaHD.UseVisualStyleBackColor = false;
-            this.btnSuaHD.Click += new System.EventHandler(this.btnSuaHD_Click);
-            // 
             // lblDateNow
             // 
             this.lblDateNow.AutoSize = true;
@@ -381,33 +294,6 @@
             this.lblDateHD.Size = new System.Drawing.Size(139, 29);
             this.lblDateHD.TabIndex = 17;
             this.lblDateHD.Text = "dd/MM/yyyy";
-            // 
-            // btnThemHD
-            // 
-            this.btnThemHD.BackColor = System.Drawing.Color.Lime;
-            this.btnThemHD.BackgroundColor = System.Drawing.Color.Lime;
-            this.btnThemHD.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnThemHD.BorderRadius = 20;
-            this.btnThemHD.BorderSize = 0;
-            this.btnThemHD.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnThemHD.FlatAppearance.BorderSize = 0;
-            this.btnThemHD.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Cyan;
-            this.btnThemHD.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
-            this.btnThemHD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnThemHD.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThemHD.ForeColor = System.Drawing.Color.Black;
-            this.btnThemHD.Image = ((System.Drawing.Image)(resources.GetObject("btnThemHD.Image")));
-            this.btnThemHD.Location = new System.Drawing.Point(150, 14);
-            this.btnThemHD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnThemHD.Name = "btnThemHD";
-            this.btnThemHD.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
-            this.btnThemHD.Size = new System.Drawing.Size(178, 69);
-            this.btnThemHD.TabIndex = 0;
-            this.btnThemHD.Text = "Thêm";
-            this.btnThemHD.TextColor = System.Drawing.Color.Black;
-            this.btnThemHD.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnThemHD.UseVisualStyleBackColor = false;
-            this.btnThemHD.Click += new System.EventHandler(this.btnThemHD_Click);
             // 
             // dtgHD
             // 
@@ -444,7 +330,7 @@
             this.clnMPN.MinimumWidth = 8;
             this.clnMPN.Name = "clnMPN";
             this.clnMPN.ReadOnly = true;
-            this.clnMPN.Width = 119;
+            this.clnMPN.Width = 129;
             // 
             // clnNLPN
             // 
@@ -454,7 +340,7 @@
             this.clnNLPN.MinimumWidth = 8;
             this.clnNLPN.Name = "clnNLPN";
             this.clnNLPN.ReadOnly = true;
-            this.clnNLPN.Width = 104;
+            this.clnNLPN.Width = 112;
             // 
             // clnMCT
             // 
@@ -464,7 +350,7 @@
             this.clnMCT.MinimumWidth = 8;
             this.clnMCT.Name = "clnMCT";
             this.clnMCT.ReadOnly = true;
-            this.clnMCT.Width = 142;
+            this.clnMCT.Width = 154;
             // 
             // clnTCT
             // 
@@ -571,6 +457,64 @@
             this.panel2.Size = new System.Drawing.Size(1262, 115);
             this.panel2.TabIndex = 23;
             // 
+            // pnHD
+            // 
+            this.pnHD.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.pnHD.Controls.Add(this.txtDiemTT);
+            this.pnHD.Controls.Add(this.lblDateHD);
+            this.pnHD.Controls.Add(this.btnSua);
+            this.pnHD.Controls.Add(this.btnDong);
+            this.pnHD.Controls.Add(this.btnLuu);
+            this.pnHD.Controls.Add(this.txtGhiChu);
+            this.pnHD.Controls.Add(this.label4);
+            this.pnHD.Controls.Add(this.txtMaMT);
+            this.pnHD.Controls.Add(this.txtMaKH);
+            this.pnHD.Controls.Add(this.txtSoLuong);
+            this.pnHD.Controls.Add(this.txtMaNV);
+            this.pnHD.Controls.Add(this.txtMaHD);
+            this.pnHD.Controls.Add(this.label9);
+            this.pnHD.Controls.Add(this.tst);
+            this.pnHD.Controls.Add(this.label3);
+            this.pnHD.Controls.Add(this.label6);
+            this.pnHD.Controls.Add(this.label5);
+            this.pnHD.Controls.Add(this.label2);
+            this.pnHD.Controls.Add(this.label1);
+            this.pnHD.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnHD.Location = new System.Drawing.Point(1262, 0);
+            this.pnHD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pnHD.Name = "pnHD";
+            this.pnHD.Size = new System.Drawing.Size(356, 1080);
+            this.pnHD.TabIndex = 22;
+            // 
+            // txtDiemTT
+            // 
+            this.txtDiemTT.Enabled = false;
+            this.txtDiemTT.Location = new System.Drawing.Point(50, 474);
+            this.txtDiemTT.Name = "txtDiemTT";
+            this.txtDiemTT.Size = new System.Drawing.Size(85, 26);
+            this.txtDiemTT.TabIndex = 18;
+            this.txtDiemTT.Text = "0";
+            // 
+            // btnLamMoi
+            // 
+            this.btnLamMoi.AutoSize = true;
+            this.btnLamMoi.BackColor = System.Drawing.Color.White;
+            this.btnLamMoi.BackgroundColor = System.Drawing.Color.White;
+            this.btnLamMoi.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnLamMoi.BorderRadius = 13;
+            this.btnLamMoi.BorderSize = 0;
+            this.btnLamMoi.FlatAppearance.BorderSize = 0;
+            this.btnLamMoi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLamMoi.ForeColor = System.Drawing.Color.White;
+            this.btnLamMoi.Image = ((System.Drawing.Image)(resources.GetObject("btnLamMoi.Image")));
+            this.btnLamMoi.Location = new System.Drawing.Point(207, 1038);
+            this.btnLamMoi.Name = "btnLamMoi";
+            this.btnLamMoi.Size = new System.Drawing.Size(30, 30);
+            this.btnLamMoi.TabIndex = 25;
+            this.btnLamMoi.TextColor = System.Drawing.Color.White;
+            this.btnLamMoi.UseVisualStyleBackColor = false;
+            this.btnLamMoi.Click += new System.EventHandler(this.btnLamMoi_Click);
+            // 
             // btnBaoCao
             // 
             this.btnBaoCao.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
@@ -594,54 +538,111 @@
             this.btnBaoCao.UseVisualStyleBackColor = false;
             this.btnBaoCao.Click += new System.EventHandler(this.btnBaoCao_Click);
             // 
-            // pnHD
+            // btnInPhieuHD
             // 
-            this.pnHD.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.pnHD.Controls.Add(this.lblDateHD);
-            this.pnHD.Controls.Add(this.btnSua);
-            this.pnHD.Controls.Add(this.btnDong);
-            this.pnHD.Controls.Add(this.btnLuu);
-            this.pnHD.Controls.Add(this.txtGhiChu);
-            this.pnHD.Controls.Add(this.label4);
-            this.pnHD.Controls.Add(this.txtMaMT);
-            this.pnHD.Controls.Add(this.txtMaKH);
-            this.pnHD.Controls.Add(this.txtSoLuong);
-            this.pnHD.Controls.Add(this.txtGiamGia);
-            this.pnHD.Controls.Add(this.txtMaNV);
-            this.pnHD.Controls.Add(this.txtMaHD);
-            this.pnHD.Controls.Add(this.label9);
-            this.pnHD.Controls.Add(this.tst);
-            this.pnHD.Controls.Add(this.label3);
-            this.pnHD.Controls.Add(this.label6);
-            this.pnHD.Controls.Add(this.label5);
-            this.pnHD.Controls.Add(this.label2);
-            this.pnHD.Controls.Add(this.label1);
-            this.pnHD.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnHD.Location = new System.Drawing.Point(1262, 0);
-            this.pnHD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.pnHD.Name = "pnHD";
-            this.pnHD.Size = new System.Drawing.Size(356, 1080);
-            this.pnHD.TabIndex = 22;
+            this.btnInPhieuHD.BackColor = System.Drawing.Color.SlateBlue;
+            this.btnInPhieuHD.BackgroundColor = System.Drawing.Color.SlateBlue;
+            this.btnInPhieuHD.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnInPhieuHD.BorderRadius = 20;
+            this.btnInPhieuHD.BorderSize = 0;
+            this.btnInPhieuHD.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnInPhieuHD.FlatAppearance.BorderSize = 0;
+            this.btnInPhieuHD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInPhieuHD.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnInPhieuHD.ForeColor = System.Drawing.Color.Black;
+            this.btnInPhieuHD.Image = ((System.Drawing.Image)(resources.GetObject("btnInPhieuHD.Image")));
+            this.btnInPhieuHD.Location = new System.Drawing.Point(939, 14);
+            this.btnInPhieuHD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnInPhieuHD.Name = "btnInPhieuHD";
+            this.btnInPhieuHD.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
+            this.btnInPhieuHD.Size = new System.Drawing.Size(178, 69);
+            this.btnInPhieuHD.TabIndex = 3;
+            this.btnInPhieuHD.Text = "In Phiếu";
+            this.btnInPhieuHD.TextColor = System.Drawing.Color.Black;
+            this.btnInPhieuHD.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnInPhieuHD.UseVisualStyleBackColor = false;
+            this.btnInPhieuHD.Click += new System.EventHandler(this.btnInPhieuHD_Click);
             // 
-            // btnLamMoi
+            // btnXoaHD
             // 
-            this.btnLamMoi.AutoSize = true;
-            this.btnLamMoi.BackColor = System.Drawing.Color.White;
-            this.btnLamMoi.BackgroundColor = System.Drawing.Color.White;
-            this.btnLamMoi.BorderColor = System.Drawing.Color.PaleVioletRed;
-            this.btnLamMoi.BorderRadius = 13;
-            this.btnLamMoi.BorderSize = 0;
-            this.btnLamMoi.FlatAppearance.BorderSize = 0;
-            this.btnLamMoi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLamMoi.ForeColor = System.Drawing.Color.White;
-            this.btnLamMoi.Image = ((System.Drawing.Image)(resources.GetObject("btnLamMoi.Image")));
-            this.btnLamMoi.Location = new System.Drawing.Point(207, 1038);
-            this.btnLamMoi.Name = "btnLamMoi";
-            this.btnLamMoi.Size = new System.Drawing.Size(30, 30);
-            this.btnLamMoi.TabIndex = 25;
-            this.btnLamMoi.TextColor = System.Drawing.Color.White;
-            this.btnLamMoi.UseVisualStyleBackColor = false;
-            this.btnLamMoi.Click += new System.EventHandler(this.btnLamMoi_Click);
+            this.btnXoaHD.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btnXoaHD.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
+            this.btnXoaHD.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnXoaHD.BorderRadius = 20;
+            this.btnXoaHD.BorderSize = 0;
+            this.btnXoaHD.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnXoaHD.FlatAppearance.BorderSize = 0;
+            this.btnXoaHD.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Cyan;
+            this.btnXoaHD.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.btnXoaHD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXoaHD.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnXoaHD.ForeColor = System.Drawing.Color.Black;
+            this.btnXoaHD.Image = ((System.Drawing.Image)(resources.GetObject("btnXoaHD.Image")));
+            this.btnXoaHD.Location = new System.Drawing.Point(673, 10);
+            this.btnXoaHD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnXoaHD.Name = "btnXoaHD";
+            this.btnXoaHD.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
+            this.btnXoaHD.Size = new System.Drawing.Size(178, 69);
+            this.btnXoaHD.TabIndex = 2;
+            this.btnXoaHD.Text = "Xoá";
+            this.btnXoaHD.TextColor = System.Drawing.Color.Black;
+            this.btnXoaHD.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnXoaHD.UseVisualStyleBackColor = false;
+            this.btnXoaHD.Click += new System.EventHandler(this.btnXoaHD_Click);
+            // 
+            // btnSuaHD
+            // 
+            this.btnSuaHD.BackColor = System.Drawing.Color.Yellow;
+            this.btnSuaHD.BackgroundColor = System.Drawing.Color.Yellow;
+            this.btnSuaHD.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnSuaHD.BorderRadius = 20;
+            this.btnSuaHD.BorderSize = 0;
+            this.btnSuaHD.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSuaHD.FlatAppearance.BorderSize = 0;
+            this.btnSuaHD.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Cyan;
+            this.btnSuaHD.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.btnSuaHD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSuaHD.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSuaHD.ForeColor = System.Drawing.Color.Black;
+            this.btnSuaHD.Image = ((System.Drawing.Image)(resources.GetObject("btnSuaHD.Image")));
+            this.btnSuaHD.Location = new System.Drawing.Point(401, 14);
+            this.btnSuaHD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnSuaHD.Name = "btnSuaHD";
+            this.btnSuaHD.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
+            this.btnSuaHD.Size = new System.Drawing.Size(178, 69);
+            this.btnSuaHD.TabIndex = 1;
+            this.btnSuaHD.Text = "Sửa";
+            this.btnSuaHD.TextColor = System.Drawing.Color.Black;
+            this.btnSuaHD.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnSuaHD.UseVisualStyleBackColor = false;
+            this.btnSuaHD.Click += new System.EventHandler(this.btnSuaHD_Click);
+            // 
+            // btnThemHD
+            // 
+            this.btnThemHD.BackColor = System.Drawing.Color.Lime;
+            this.btnThemHD.BackgroundColor = System.Drawing.Color.Lime;
+            this.btnThemHD.BorderColor = System.Drawing.Color.PaleVioletRed;
+            this.btnThemHD.BorderRadius = 20;
+            this.btnThemHD.BorderSize = 0;
+            this.btnThemHD.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnThemHD.FlatAppearance.BorderSize = 0;
+            this.btnThemHD.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Cyan;
+            this.btnThemHD.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
+            this.btnThemHD.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThemHD.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThemHD.ForeColor = System.Drawing.Color.Black;
+            this.btnThemHD.Image = ((System.Drawing.Image)(resources.GetObject("btnThemHD.Image")));
+            this.btnThemHD.Location = new System.Drawing.Point(150, 14);
+            this.btnThemHD.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnThemHD.Name = "btnThemHD";
+            this.btnThemHD.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
+            this.btnThemHD.Size = new System.Drawing.Size(178, 69);
+            this.btnThemHD.TabIndex = 0;
+            this.btnThemHD.Text = "Thêm";
+            this.btnThemHD.TextColor = System.Drawing.Color.Black;
+            this.btnThemHD.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnThemHD.UseVisualStyleBackColor = false;
+            this.btnThemHD.Click += new System.EventHandler(this.btnThemHD_Click);
             // 
             // FormHoaDon
             // 
@@ -679,7 +680,6 @@
         private System.Windows.Forms.TextBox txtMaMT;
         private System.Windows.Forms.TextBox txtMaKH;
         private System.Windows.Forms.TextBox txtSoLuong;
-        private System.Windows.Forms.TextBox txtGiamGia;
         private System.Windows.Forms.TextBox txtMaNV;
         private System.Windows.Forms.TextBox txtMaHD;
         private System.Windows.Forms.Label label9;
@@ -715,5 +715,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn clnMNV;
         private System.Windows.Forms.DataGridViewTextBoxColumn clnGC;
         private VBButton btnBaoCao;
+        private System.Windows.Forms.TextBox txtDiemTT;
     }
 }

@@ -120,54 +120,64 @@ namespace DoAn
             CheckInputTxt();
             if (!checkError)
             {
-                conn.Open();
-                string QuerryCheckMa = "select MaKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'";
-                SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                SqlDataReader dta = cmd.ExecuteReader();
-                if (dta.Read() == true && txtMaKH.Text != dtgKH.Rows[numrow].Cells[0].Value.ToString())
+                if (checkClickdtg)
                 {
-                    ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng đã tồn tại");
-                    conn.Close();
+                    checkClickdtg = false;
+                    conn.Open();
+                    string QuerryCheckMa = "select MaKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'";
+                    SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
+                    SqlDataReader dta = cmd.ExecuteReader();
+                    if (dta.Read() == true && txtMaKH.Text != dtgKH.Rows[numrow].Cells[0].Value.ToString())
+                    {
+                        ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng đã tồn tại");
+                        conn.Close();
+                    }
+                    else
+                    {
+
+                        conn.Close();
+                        string GioiTinh = string.Empty;
+                        string FeedBack = string.Empty;
+                        if (radNam.Checked == true)
+                        {
+                            GioiTinh = "Nam";
+                        }
+                        else if (radNu.Checked == true)
+                        {
+                            GioiTinh = "Nữ";
+                        }
+                        if (radRatHaiLong.Checked == true)
+                        {
+                            FeedBack = "Rất hài lòng";
+                        }
+                        else if (radHaiLong.Checked == true)
+                        {
+                            FeedBack = "Hài lòng";
+                        }
+                        else if (radTe.Checked == true)
+                        {
+                            FeedBack = "Tệ";
+                        }
+                        conn.Open();
+                        string QuerryUpdate = " Update dbo.KhachHang set MaKH = '" + txtMaKH.Text + "',TenKH = N'" + txtTenKH.Text + "',CCCD ='" + txtCCCD.Text + "',GioiTinhKH =N'" + GioiTinh + "',NgaySinhKH ='" + dtpNgaySinh.Value.ToShortDateString() + "',DiaChiKH =N'" + txtDiaChi.Text + "',DienThoaiKH = N'" + txtDienThoai.Text + "'," +
+                            "FeedBack = N'" + FeedBack + "',Bank=N'" + txtBank.Text + "',GhiChu=N'" + txtGhiChu.Text + "' where MaKH = N'" + dtgKH.Rows[numrow].Cells[0].Value.ToString() + "'";
+                        SqlCommand cmd1 = new SqlCommand(QuerryUpdate, conn);
+                        cmd1.ExecuteNonQuery();
+                        conn.Close();
+                        conn.Open();
+                        string QuerrySelect = "select *  from dbo.KhachHang";
+                        SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd2);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        dtgKH.DataSource = dt;
+                        conn.Close();
+                    }
                 }
                 else
                 {
-                    conn.Close();
-                    string GioiTinh = string.Empty;
-                    string FeedBack = string.Empty;
-                    if (radNam.Checked == true)
-                    {
-                        GioiTinh = "Nam";
-                    }
-                    else if (radNu.Checked == true)
-                    {
-                        GioiTinh = "Nữ";
-                    }
-                    if (radRatHaiLong.Checked == true)
-                    {
-                        FeedBack = "Rất hài lòng";
-                    }
-                    else if (radHaiLong.Checked == true)
-                    {
-                        FeedBack = "Hài lòng";
-                    }
-                    else if (radTe.Checked == true)
-                    {
-                        FeedBack = "Tệ";
-                    }
-                    conn.Open();
-                    string QuerryUpdate = " Update dbo.KhachHang set MaKH = '" + txtMaKH.Text + "',TenKH = N'" + txtTenKH.Text + "',CCCD ='" + txtCCCD.Text + "',GioiTinhKH =N'" + GioiTinh + "',NgaySinhKH ='" + dtpNgaySinh.Value.ToShortDateString() + "',DiaChiKH =N'" + txtDiaChi.Text + "',DienThoaiKH = N'" + txtDienThoai.Text + "'," +
-                        "FeedBack = N'" + FeedBack + "',Bank=N'" + txtBank.Text + "',GhiChu=N'" + txtGhiChu.Text + "' where MaKH = N'" + dtgKH.Rows[numrow].Cells[0].Value.ToString() + "'";
-                    SqlCommand cmd1 = new SqlCommand(QuerryUpdate, conn);
-                    cmd1.ExecuteNonQuery();
-                    conn.Close();
-                    conn.Open();
-                    string QuerrySelect = "select *  from dbo.KhachHang";
-                    SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
-                    SqlDataAdapter da = new SqlDataAdapter(cmd2);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dtgKH.DataSource = dt;
-                    conn.Close();
+                    MessageBox.Show("Chưa chọn dòng để sửa", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ResetTextBox();
                 }
             }
         }

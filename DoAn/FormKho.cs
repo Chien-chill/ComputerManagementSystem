@@ -121,9 +121,12 @@ namespace DoAn
             CheckInputTxt();
             if (!checkError)
             {
+                if (checkClickdtg)
+                {
+                    checkClickdtg = false;
                     conn.Open();
                     string QuerryCheckMaMTMT = "select MaMT from dbo.MayTinh where MaMT = '" + txtMaMT.Text + "'";
-                    SqlCommand cmd= new SqlCommand(QuerryCheckMaMTMT, conn);
+                    SqlCommand cmd = new SqlCommand(QuerryCheckMaMTMT, conn);
                     SqlDataReader dta1 = cmd.ExecuteReader();
                     if (!dta1.Read())
                     {
@@ -154,16 +157,27 @@ namespace DoAn
                             SqlCommand cmd3 = new SqlCommand(QuerrySelectTenCT, conn);
                             object GetTenCT = cmd3.ExecuteScalar();
                             conn.Close();
+                            conn.Open();
+                            string QuerrySelectDonGia = "select DonGia from dbo.MayTinh where MaMT = '" + txtMaMT.Text + "'";
+                            SqlCommand cmd5 = new SqlCommand(QuerrySelectDonGia, conn);
+                            object GetDonGia = cmd5.ExecuteScalar();
+                            conn.Close();
+                            double DonGiaNhap = Convert.ToDouble(GetDonGia);
+                            double DonGiaBan = DonGiaNhap * 1.1;
                             string TenMT = Convert.ToString(GetTenMT);
                             string TenCT = Convert.ToString(GetTenCT);
-                            conn.Open();
-                            String QuerryUpdate = " Update dbo.Kho MaMT = '" + txtMaMT.Text + "',TenMT =N'" + TenMT + "',MaCT ='" + txtMaCT.Text + "',TenCT=N'" + TenCT + "'," +
-                                "SoLuongTon = " + int.Parse(txtSLT.Text) + ", NgayNhap = '" + dtpNgayNhap.Value.ToShortDateString() + "' where " +
+                            
+                            String QuerryUpdate = " Update dbo.Kho set MaMT = '" + txtMaMT.Text + "',TenMT =N'" + TenMT + "',MaCT ='" + txtMaCT.Text + "',TenCT=N'" + TenCT + "'," +
+                                "SoLuongTon = " + int.Parse(txtSLT.Text) + ", NgayNhap = '" + dtpNgayNhap.Value.ToShortDateString() + "',DonGiaNhap=" + DonGiaNhap + ",DonGiaBan= " + DonGiaBan + " where " +
                                 "MaMT = '" + dtgKho.Rows[numrow].Cells[0].Value.ToString() + "'" +
                                 "and MaCT = '" + dtgKho.Rows[numrow].Cells[3].Value.ToString() + "'" +
                                 "and SoLuongTon= " + int.Parse(dtgKho.Rows[numrow].Cells[2].Value.ToString()) + "" +
                                 "and NgayNhap ='" + dtgKho.Rows[numrow].Cells[5].Value.ToString() + "'";
-                            string QuerrySelect = "select *  from dbo.KhachHang";
+                            conn.Open();
+                              SqlCommand cmd6 = new SqlCommand(QuerryUpdate, conn);
+                            cmd6.ExecuteNonQuery();
+                            conn.Close();
+                            string QuerrySelect = "select *  from dbo.Kho";
                             SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
                             SqlDataAdapter da = new SqlDataAdapter(cmd1);
                             DataTable dt = new DataTable();
@@ -172,6 +186,12 @@ namespace DoAn
                             conn.Close();
                         }
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Chưa chọn dòng để sửa", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    ResetTextBox();
+                }
             }
         }
 
@@ -243,19 +263,26 @@ namespace DoAn
                         SqlCommand cmd3 = new SqlCommand(QuerrySelectTenCT, conn);
                         object GetTenCT = cmd3.ExecuteScalar();
                         conn.Close();
+                        conn.Open();
+                        string QuerrySelectDonGia = "select DonGia from dbo.MayTinh where MaMT = '" + txtMaMT.Text + "'";
+                        SqlCommand cmd5 = new SqlCommand(QuerrySelectDonGia, conn);
+                        object GetDonGia = cmd5.ExecuteScalar();
+                        conn.Close();
+                        double DonGiaNhap = Convert.ToDouble(GetDonGia);
+                        double DonGiaBan = DonGiaNhap * 1.1;
                         string TenMT = Convert.ToString(GetTenMT);
                         string TenCT = Convert.ToString(GetTenCT);
                         conn.Open();
-                        String QuerryInsert = " insert into dbo.Kho(MaMT,TenMT,MaCT,TenCT,SoLuongTon,NgayNhap) values ('" + txtMaMT.Text + "',N'" + TenMT + "','" + txtMaCT.Text + "'," +
-                            "N'" + TenCT + "'," + int.Parse(txtSLT.Text) + ",'" + dtpNgayNhap.Value.ToShortDateString() + "')";
+                        String QuerryInsert = " insert into dbo.Kho(MaMT,TenMT,MaCT,TenCT,SoLuongTon,NgayNhap,DonGiaNhap,DonGiaBan) values ('" + txtMaMT.Text + "',N'" + TenMT + "','" + txtMaCT.Text + "'," +
+                            "N'" + TenCT + "'," + int.Parse(txtSLT.Text) + ",'" + dtpNgayNhap.Value.ToShortDateString() + "',"+DonGiaNhap+","+DonGiaBan+")";
                         SqlCommand cmd1 = new SqlCommand(QuerryInsert, conn);
                         cmd1.ExecuteNonQuery();
                         conn.Close();
                         ResetTextBox();
                         conn.Open();
                         string QuerrySelect = "select *  from dbo.Kho";
-                        SqlCommand cmd5 = new SqlCommand(QuerrySelect, conn);
-                        SqlDataAdapter da = new SqlDataAdapter(cmd5);
+                        SqlCommand cmd6 = new SqlCommand(QuerrySelect, conn);
+                        SqlDataAdapter da = new SqlDataAdapter(cmd6);
                         DataTable dt = new DataTable();
                         da.Fill(dt);
                         dtgKho.DataSource = dt;
@@ -348,6 +375,11 @@ namespace DoAn
             txtTimKiem.Text = "";
             pnInputSearch.Visible = false;
             FormKho_Load(sender, e);
+        }
+
+        private void pnKho_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

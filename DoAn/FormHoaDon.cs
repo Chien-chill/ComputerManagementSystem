@@ -38,12 +38,10 @@ namespace DoAn
             if (dtgHD.DataSource == null)
             {
                 txtMaKH.Enabled = true;
-                txtGiamGia.Enabled = true;
             }
             else
             {
                 txtMaKH.Enabled = false;
-                txtGiamGia.Enabled = false;
             }
             lblDateHD.Text = DateTime.Now.ToShortDateString();
             conn.Open();
@@ -71,14 +69,12 @@ namespace DoAn
             txtMaHD.Text = txtMaHD.Text.Trim();
             txtMaKH.Text = txtMaKH.Text.Trim();
             txtMaMT.Text = txtMaMT.Text.Trim();
-            txtGiamGia.Text = txtGiamGia.Text.Trim();
             txtSoLuong.Text = txtSoLuong.Text.Trim();
             txtMaNV.Text = txtMaNV.Text.Trim();
             Regex trimmer = new Regex(@"\s\s+"); // Xoá khoảng trắng thừa trong chuỗi 
             txtMaHD.Text = trimmer.Replace(txtMaHD.Text, " ");
             txtMaKH.Text = trimmer.Replace(txtMaKH.Text, " ");
             txtMaMT.Text = trimmer.Replace(txtMaMT.Text, " ");
-            txtGiamGia.Text = trimmer.Replace(txtGiamGia.Text, " ");
             txtSoLuong.Text = trimmer.Replace(txtSoLuong.Text, " ");
             txtMaNV.Text = trimmer.Replace(txtMaNV.Text, " ");
         }
@@ -128,11 +124,6 @@ namespace DoAn
                 ErrorWarning(errorProvider1, txtSoLuong, "Sai định dạng số lượng");
                 conn.Close();
             }
-            else if (int.TryParse(txtGiamGia.Text, out songuyen) == false || int.Parse(txtGiamGia.Text) < 0)
-            {
-                ErrorWarning(errorProvider1, txtGiamGia, "Sai định dạng giảm giá");
-                conn.Close();
-            }
             else if (txtMaNV.Text == "")
             {
                 ErrorWarning(errorProvider1, txtMaNV, "Chưa nhập mã nhân viên");
@@ -147,8 +138,8 @@ namespace DoAn
                     MaHoaDon = txtMaHD.Text,
                     NgayBan = lblDateHD.Text,
                     MaKH = txtMaKH.Text,
-                    GiamGia = int.Parse(txtGiamGia.Text),
                     MaMT = txtMaMT.Text,
+                    GiamGia=int.Parse(txtDiemTT.Text)/10,
                     SoLuong = int.Parse(txtSoLuong.Text),
                     MaNV = txtMaNV.Text,
                     GhiChu = txtGhiChu.Text
@@ -171,18 +162,18 @@ namespace DoAn
                     object GetTenKH = cmd2.ExecuteScalar();
                     conn.Close();
                     conn.Open();
-                    SqlCommand cmd4 = new SqlCommand("select MaMT from dbo.MayTinh where MaMT ='" + hoaDon.MaMT + "'", conn);
+                    SqlCommand cmd4 = new SqlCommand("select MaMT from dbo.Kho where MaMT ='" + hoaDon.MaMT + "'", conn);
                     SqlDataReader dta2 = cmd4.ExecuteReader();
                     if (!dta2.Read())
                     {
-                        ErrorWarning(errorProvider1, txtMaMT, "Mã máy tính không tồn tại");
+                        ErrorWarning(errorProvider1, txtMaMT, "Mã máy tính không còn trong kho");
                         conn.Close();
                     }
                     else
                     {
                         conn.Close();
                         conn.Open();
-                        string QuerrySelectDonGia = "select DonGia from dbo.MayTinh where MaMT = '" + hoaDon.MaMT + "'";
+                        string QuerrySelectDonGia = "select DonGiaBan from dbo.Kho where MaMT = '" + hoaDon.MaMT + "'";
                         SqlCommand cmd5 = new SqlCommand(QuerrySelectDonGia, conn);
                         object GetDonGia = cmd5.ExecuteScalar();
                         string QuerrySelectTenMT = "select TenMT from dbo.MayTinh where MaMT = '" + hoaDon.MaMT + "'";
@@ -202,7 +193,6 @@ namespace DoAn
                         conn.Close();
                         txtMaHD.Enabled = false;
                         txtMaKH.Enabled = false;
-                        txtGiamGia.Enabled = false;
                         txtMaMT.Text = "";
                         txtSoLuong.Text = "";
                         txtGhiChu.Text = "";
@@ -257,10 +247,8 @@ namespace DoAn
             if (CheckClickBtnSua && numrow >= 0)
             {
                 txtMaKH.Enabled = true;
-                txtGiamGia.Enabled = true;
                 txtMaHD.Text = dtgHD.Rows[numrow].Cells[0].Value.ToString();
                 txtMaKH.Text = dtgHD.Rows[numrow].Cells[1].Value.ToString();
-                txtGiamGia.Text = dtgHD.Rows[numrow].Cells[7].Value.ToString();
                 txtMaMT.Text = dtgHD.Rows[numrow].Cells[3].Value.ToString();
                 txtSoLuong.Text = dtgHD.Rows[numrow].Cells[5].Value.ToString();
                 txtMaNV.Text = dtgHD.Rows[numrow].Cells[9].Value.ToString();
@@ -290,84 +278,89 @@ namespace DoAn
             {
                 ErrorWarning(errorProvider1, txtSoLuong, "Sai định dạng số lượng");
             }
-            else if (int.TryParse(txtGiamGia.Text, out songuyen) == false || int.Parse(txtGiamGia.Text) < 0)
-            {
-                ErrorWarning(errorProvider1, txtGiamGia, "Sai định dạng giảm giá");
-            }
             else if (txtMaNV.Text == "")
             {
                 ErrorWarning(errorProvider1, txtMaNV, "Chưa nhập mã nhân viên");
             }
             else
             {
-                conn.Open();
-                SqlCommand cmd3 = new SqlCommand("select MaKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'", conn);
-                SqlDataReader dta1 = cmd3.ExecuteReader();
-                if (!dta1.Read())
+                if (checkClickdtg)
                 {
-                    ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng không tồn tại");
-                    conn.Close();
-                }
-                else
-                {
-                    conn.Close();
+                    checkClickdtg = false;
                     conn.Open();
-                    string QuerrySelectTenKH = "select TenKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'";
-                    SqlCommand cmd2 = new SqlCommand(QuerrySelectTenKH, conn);
-                    object GetTenKH = cmd2.ExecuteScalar();
-                    conn.Close();
-                    conn.Open();
-                    SqlCommand cmd4 = new SqlCommand("select MaMT from dbo.MayTinh where MaMT ='" + txtMaMT.Text + "'", conn);
-                    SqlDataReader dta2 = cmd4.ExecuteReader();
-                    if (!dta2.Read())
+                    SqlCommand cmd3 = new SqlCommand("select MaKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'", conn);
+                    SqlDataReader dta1 = cmd3.ExecuteReader();
+                    if (!dta1.Read())
                     {
-                        ErrorWarning(errorProvider1, txtMaMT, "Mã máy tính không tồn tại");
+                        ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng không tồn tại");
                         conn.Close();
                     }
                     else
                     {
                         conn.Close();
                         conn.Open();
-                        string QuerrySelectDonGia = "select DonGia from dbo.MayTinh where MaMT = '" + txtMaMT.Text + "'";
-                        SqlCommand cmd5 = new SqlCommand(QuerrySelectDonGia, conn);
-                        object GetDonGia = cmd5.ExecuteScalar();
-                        string QuerrySelectTenMT = "select TenMT from dbo.MayTinh where MaMT = '" + txtMaMT.Text + "'";
-                        SqlCommand cmd6 = new SqlCommand(QuerrySelectTenMT, conn);
-                        object GetTenMT = cmd6.ExecuteScalar();
-                        conn.Close();
-                        string TenMT = Convert.ToString(GetTenMT);
-                        string TenKH = Convert.ToString(GetTenKH);
-                        double DonGia = Convert.ToDouble(GetDonGia);
-                        double ThanhTien = DonGia * int.Parse(txtSoLuong.Text);
-                        string QuerryUpdate = " Update dbo.HoaDon TenMT = N'" + TenMT + "',DonGia = " + DonGia + ",ThanhTien = " + ThanhTien +
-                    ",MaMT = '" + txtMaMT.Text + "',SoLuongMua = " + int.Parse(txtSoLuong.Text) + ", MaNV = '"
-                     + txtMaNV.Text + "', GhiChu = N'" + txtGhiChu.Text + "' where MaHD = '" + txtMaHD.Text + "' and MaKH = '" + dtgHD.Rows[numrow].Cells[1].Value.ToString() +
-                     "' and GiamGia = '" + dtgHD.Rows[numrow].Cells[7].Value.ToString() + "' and MaMT = '" + dtgHD.Rows[numrow].Cells[3].Value.ToString() + "' and SoLuongMua = '" + dtgHD.Rows[numrow].Cells[5].Value.ToString() + "' and MaNV = '"
-                     + dtgHD.Rows[numrow].Cells[9].Value.ToString() + "' and GhiChu = '" + dtgHD.Rows[numrow].Cells[11].Value.ToString() + "';";
-                        string QuerryUpdateKH = "Update dbo.HoaDon set MaKH = '" + txtMaKH.Text + "', TenKH =N'" + TenKH + "' where MaHD = '" + txtMaHD.Text + "'";
-                        conn.Open();
-                        SqlCommand cmd8 = new SqlCommand("Update dbo.HoaDon set GiamGia = '" + txtGiamGia.Text + "' where MaHD = '" + txtMaHD.Text + "'", conn);
-                        cmd8.ExecuteNonQuery();
+                        string QuerrySelectTenKH = "select TenKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'";
+                        SqlCommand cmd2 = new SqlCommand(QuerrySelectTenKH, conn);
+                        object GetTenKH = cmd2.ExecuteScalar();
                         conn.Close();
                         conn.Open();
-                        SqlCommand cmd = new SqlCommand(QuerryUpdate, conn);
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
-                        conn.Open();
-                        SqlCommand cmd7 = new SqlCommand(QuerryUpdateKH, conn);
-                        cmd7.ExecuteNonQuery();
-                        conn.Close();
-                        string QuerrySelect = "select *  from dbo.HoaDon where MaHD = '" + txtMaHD.Text + "'";
-                        conn.Open();
-                        SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
-                        SqlDataAdapter da = new SqlDataAdapter(cmd1);
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-                        dtgHD.DataSource = dt;
-                        conn.Close();
-                        txtMaKH.Enabled = false;
-                        txtGiamGia.Enabled = false;
+                        SqlCommand cmd4 = new SqlCommand("select MaMT from dbo.Kho where MaMT ='" + txtMaMT.Text + "'", conn);
+                        SqlDataReader dta2 = cmd4.ExecuteReader();
+                        if (!dta2.Read())
+                        {
+                            ErrorWarning(errorProvider1, txtMaMT, "Mã máy tính không còn trong kho");
+                            conn.Close();
+                        }
+                        else
+                        {
+                            conn.Close();
+                            conn.Open();
+                            string QuerrySelectDonGia = "select DonGiaBan from dbo.Kho where MaMT = '" + txtMaMT.Text + "'";
+                            SqlCommand cmd5 = new SqlCommand(QuerrySelectDonGia, conn);
+                            object GetDonGia = cmd5.ExecuteScalar();
+                            string QuerrySelectTenMT = "select TenMT from dbo.MayTinh where MaMT = '" + txtMaMT.Text + "'";
+                            SqlCommand cmd6 = new SqlCommand(QuerrySelectTenMT, conn);
+                            object GetTenMT = cmd6.ExecuteScalar();
+                            conn.Close();
+                            string TenMT = Convert.ToString(GetTenMT);
+                            string TenKH = Convert.ToString(GetTenKH);
+                            double DonGia = Convert.ToDouble(GetDonGia);
+                            double ThanhTien = DonGia * int.Parse(txtSoLuong.Text);
+                            int GiamGia = int.Parse(txtDiemTT.Text)/10;
+                            string QuerryUpdate = " Update dbo.HoaDon set TenMT = N'" + TenMT + "',DonGia = " + DonGia + ",ThanhTien = " + ThanhTien +
+                        ",MaMT = '" + txtMaMT.Text + "',SoLuongMua = " + int.Parse(txtSoLuong.Text) + ", MaNV = '"
+                         + txtMaNV.Text + "', GhiChu = N'" + txtGhiChu.Text + "' where MaHD = '" + txtMaHD.Text + "' and MaKH = '" + dtgHD.Rows[numrow].Cells[1].Value.ToString() +
+                         "' and GiamGia = '" + dtgHD.Rows[numrow].Cells[7].Value.ToString() + "' and MaMT = '" + dtgHD.Rows[numrow].Cells[3].Value.ToString() + "' and SoLuongMua = '" + dtgHD.Rows[numrow].Cells[5].Value.ToString() + "' and MaNV = '"
+                         + dtgHD.Rows[numrow].Cells[9].Value.ToString() + "' and GhiChu = '" + dtgHD.Rows[numrow].Cells[11].Value.ToString() + "';";
+                            string QuerryUpdateKH = "Update dbo.HoaDon set MaKH = '" + txtMaKH.Text + "', TenKH =N'" + TenKH + "' where MaHD = '" + txtMaHD.Text + "'";
+                            conn.Open();
+                            SqlCommand cmd = new SqlCommand(QuerryUpdate, conn);
+                            cmd.ExecuteNonQuery();
+                            conn.Close();
+                            string QuerryUpdateGG = "Update dbo.HoaDon set GiamGia = " + GiamGia + "where MaHD = '" + txtMaHD.Text + "'";
+                            conn.Open();
+                            SqlCommand cmd0 = new SqlCommand(QuerryUpdateGG, conn);
+                            cmd0.ExecuteNonQuery();
+                            conn.Close();
+                            conn.Open();
+                            SqlCommand cmd7 = new SqlCommand(QuerryUpdateKH, conn);
+                            cmd7.ExecuteNonQuery();
+                            conn.Close();
+                            string QuerrySelect = "select *  from dbo.HoaDon where MaHD = '" + txtMaHD.Text + "'";
+                            conn.Open();
+                            SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
+                            SqlDataAdapter da = new SqlDataAdapter(cmd1);
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+                            dtgHD.DataSource = dt;
+                            conn.Close();
+                            txtMaKH.Enabled = false;
+                        }
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Chưa chọn dòng để sửa", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -458,6 +451,7 @@ namespace DoAn
                 HoaDon.MailMerge.Execute(new[] { "BANK" }, new[] { Bank });
                 HoaDon.MailMerge.Execute(new[] { "Ma_Nhan_Vien" }, new[] { dtgHD.Rows[0].Cells[9].Value.ToString() });
                 HoaDon.MailMerge.Execute(new[] { "Ten_Nhan_Vien" }, new[] { TenNV });
+                HoaDon.MailMerge.Execute(new[] { "Diem_TT" }, new[] { DiemThanThiet.ToString() });
 
                 int count = dtgHD.Rows.Count;
                 Table ThongTin = HoaDon.GetChild(NodeType.Table, 0, true) as Table;
@@ -520,7 +514,7 @@ namespace DoAn
                 HoaDon.MailMerge.Execute(new[] { "Tong_So_Tien" }, new[] { TongSoTien.ToString() });
                 HoaDon.MailMerge.Execute(new[] { "Giam_Gia" }, new[] { dtgHD.Rows[0].Cells[7].Value.ToString() });
                 double TienThanhToan;
-                double GiamGia = (100 - double.Parse(txtGiamGia.Text))/100;
+                double GiamGia = (100 - double.Parse(dtgHD.Rows[0].Cells[7].Value.ToString()))/100;
                 TienThanhToan = TongSoTien * GiamGia;
                 HoaDon.MailMerge.Execute(new[] { "Thanh_Toan" }, new[] { TienThanhToan.ToString() });
                 HoaDon.SaveAndOpenFile("HoaDon.doc");
@@ -528,6 +522,10 @@ namespace DoAn
                 SqlCommand cmd16 = new SqlCommand("update dbo.KhachHang set DiemThanThiet = "+ DiemThanThiet+"where MaKH = '" + dtgHD.Rows[0].Cells[1].Value.ToString() + "'", conn);
                 cmd16.ExecuteNonQuery();
                 conn.Close();
+            }
+            else
+            {
+                MessageBox.Show("Chưa nhập thông tin hóa đơn", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
         }
@@ -592,6 +590,28 @@ namespace DoAn
         private void txtMaHD_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void txtMaKH_TextChanged(object sender, EventArgs e)
+        {
+            conn.Open();
+            SqlCommand cmd3 = new SqlCommand("select MaKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'", conn);
+            SqlDataReader dta1 = cmd3.ExecuteReader();
+            if (dta1.Read())
+            {
+            conn.Close();
+            conn.Open();
+            string QuerrySelectDiemTT = "select DiemThanThiet from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'";
+            SqlCommand cmd = new SqlCommand(QuerrySelectDiemTT, conn);
+            object GetDiemTT = cmd.ExecuteScalar();
+            string DiemTT = Convert.ToString(GetDiemTT);
+            conn.Close();
+            txtDiemTT.Text = DiemTT;
+            }
+            else
+            {
+            conn.Close();
+            }    
         }
     }
 }

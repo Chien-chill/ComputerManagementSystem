@@ -12,7 +12,7 @@ namespace DoAn
         private string ngayBan;
         private string maKH;
         private string tenKH;
-        private double giamGia;
+        private int giamGia;
         private string maMT;
         private string tenMT;
         private int soLuong;
@@ -25,7 +25,7 @@ namespace DoAn
         public string NgayBan { get => ngayBan; set => ngayBan = value; }
         public string MaKH { get => maKH; set => maKH = value; }
         public string TenKH { get => tenKH; set => tenKH = value; }
-        public double GiamGia { get => giamGia; set => giamGia = value; }
+        public int GiamGia { get => giamGia; set => giamGia = value; }
         public string MaMT { get => maMT; set => maMT = value; }
         public string TenMT { get => tenMT; set => tenMT = value; }
         public int SoLuong { get => soLuong; set => soLuong = value; }
