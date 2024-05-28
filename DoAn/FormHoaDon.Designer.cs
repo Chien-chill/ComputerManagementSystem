@@ -175,7 +175,6 @@
             this.txtMaHD.Name = "txtMaHD";
             this.txtMaHD.Size = new System.Drawing.Size(253, 26);
             this.txtMaHD.TabIndex = 7;
-            this.txtMaHD.TextChanged += new System.EventHandler(this.txtMaHD_TextChanged);
             // 
             // label9
             // 

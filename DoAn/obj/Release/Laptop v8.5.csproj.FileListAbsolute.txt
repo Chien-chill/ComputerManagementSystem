@@ -1,0 +1,16 @@
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\Laptop v8.5.csproj.AssemblyReference.cache
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.frmDangNhap.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.FormBanHang.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.FormHoaDon.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.FormKhachHang.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.FormKho.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.FormMayTinh.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.FormNCC.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.FormNhanVien.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.FormNhap.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.FormTrangChu.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.FormXuat.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.Properties.Resources.resources
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\Laptop v8.5.csproj.GenerateResource.cache
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\DoAn.exe.licenses
+D:\source\repos\QuanLyMayTinh\DoAn\obj\Release\Laptop v8.5.csproj.CoreCompileInputs.cache

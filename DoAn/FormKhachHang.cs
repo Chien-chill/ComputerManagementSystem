@@ -9,23 +9,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace DoAn
 {
     public partial class FormKhachHang : Form
     {
-        SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\PC\source\repos\QuanLyMayTinh\DoAn\DatabaseQuanLy.mdf;Integrated Security=True");
         bool CheckClickBtnSua = false;
+        Functions f = new Functions();
         public FormKhachHang()
         {
             InitializeComponent();
         }
-
-        private void radHaiLong_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnThemKH_Click(object sender, EventArgs e)
         {
             CheckClickBtnSua = false;
@@ -37,31 +32,26 @@ namespace DoAn
             btnTimKiemKH.Enabled = false;
         }
         bool checkError = false;
-        public void ErrorWarning(ErrorProvider error, TextBox txt, string message)
-        {
-            error.SetError(txt, message);
-            txt.Focus();
-            checkError = true;
-            conn.Close();
-        }
-       public void dtpNgaySinh_ValueChanged(object sender, EventArgs e)
-        {
-        }
         public void CheckInputTxt()
         {
             int songuyen = 0;
             DateTime date = new DateTime(2023, 11, 22);
             if (txtMaKH.Text == "")
             {
-                ErrorWarning(errorProvider1, txtMaKH, "Chưa nhập mã khách hàng");
+                f.ErrorWarning(errorProvider1,txtMaKH,"Chưa nhập mã khách hàng");
+                checkError = true;
             }
             else if (txtTenKH.Text == "")
             {
-                ErrorWarning(errorProvider1, txtTenKH, "Chưa nhập tên khách hàng");
+                f.ErrorWarning(errorProvider1,txtTenKH,"Chưa nhập tên khách hàng");
+                checkError = true;
+
             }
             else if (txtCCCD.Text == "")
             {
-                ErrorWarning(errorProvider1, txtCCCD, "Chưa nhập số căn cước");
+                f.ErrorWarning(errorProvider1, txtCCCD, "Chưa nhập số căn cước");
+                checkError = true;
+
             }
             else if (radNam.Checked == false && radNu.Checked == false)
             {
@@ -80,19 +70,27 @@ namespace DoAn
             }
             else if (txtDiaChi.Text == "")
             {
-                ErrorWarning(errorProvider1, txtDiaChi, "Chưa nhập địa chỉ");
+                f.ErrorWarning(errorProvider1, txtDiaChi, "Chưa nhập địa chỉ");
+                checkError = true;
+
             }
             else if (txtDienThoai.Text == "")
             {
-                ErrorWarning(errorProvider1, txtDienThoai, "Chưa nhập số điện thoại");
+                f.ErrorWarning(errorProvider1, txtDienThoai, "Chưa nhập số điện thoại");
+                checkError = true;
+
             }
             else if (int.TryParse(txtDienThoai.Text, out songuyen) == false || int.Parse(txtDienThoai.Text) <= 0)
             {
-                ErrorWarning(errorProvider1, txtDienThoai, "Sai định dạng số điện thoại");
+                f.ErrorWarning(errorProvider1, txtDienThoai, "Sai định dạng số điện thoại");
+                checkError = true;
+
             }
             else if (txtBank.Text == "")
             {
-                ErrorWarning(errorProvider1, txtBank, "Chưa nhập bảo hành");
+                f.ErrorWarning(errorProvider1, txtBank, "Chưa nhập bảo hành");
+                checkError = true;
+
             }
         }
 
@@ -123,19 +121,12 @@ namespace DoAn
                 if (checkClickdtg)
                 {
                     checkClickdtg = false;
-                    conn.Open();
-                    string QuerryCheckMa = "select MaKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'";
-                    SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                    SqlDataReader dta = cmd.ExecuteReader();
-                    if (dta.Read() == true && txtMaKH.Text != dtgKH.Rows[numrow].Cells[0].Value.ToString())
+                    if (f.Select_TblCheck("MaKH","KhachHang","MaKH",txtMaKH.Text) && txtMaKH.Text != dtgKH.Rows[numrow].Cells[0].Value.ToString())
                     {
-                        ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng đã tồn tại");
-                        conn.Close();
+                        f.ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng đã tồn tại");
                     }
                     else
                     {
-
-                        conn.Close();
                         string GioiTinh = string.Empty;
                         string FeedBack = string.Empty;
                         if (radNam.Checked == true)
@@ -158,20 +149,28 @@ namespace DoAn
                         {
                             FeedBack = "Tệ";
                         }
-                        conn.Open();
-                        string QuerryUpdate = " Update dbo.KhachHang set MaKH = '" + txtMaKH.Text + "',TenKH = N'" + txtTenKH.Text + "',CCCD ='" + txtCCCD.Text + "',GioiTinhKH =N'" + GioiTinh + "',NgaySinhKH ='" + dtpNgaySinh.Value.ToShortDateString() + "',DiaChiKH =N'" + txtDiaChi.Text + "',DienThoaiKH = N'" + txtDienThoai.Text + "'," +
-                            "FeedBack = N'" + FeedBack + "',Bank=N'" + txtBank.Text + "',GhiChu=N'" + txtGhiChu.Text + "' where MaKH = N'" + dtgKH.Rows[numrow].Cells[0].Value.ToString() + "'";
-                        SqlCommand cmd1 = new SqlCommand(QuerryUpdate, conn);
-                        cmd1.ExecuteNonQuery();
-                        conn.Close();
-                        conn.Open();
-                        string QuerrySelect = "select *  from dbo.KhachHang";
-                        SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
-                        SqlDataAdapter da = new SqlDataAdapter(cmd2);
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-                        dtgKH.DataSource = dt;
-                        conn.Close();
+                        string[] field = { "MaKH", "TenKH", "CCCD", "GioiTinhKH", "NgaySinhKH", "DiaChiKH", "DienThoaiKH", "FeedBack", "Bank", "GhiChu" };
+                        SqlParameter[] parameter = new SqlParameter[]
+                        {
+                            new SqlParameter("@1",txtMaKH.Text),
+                            new SqlParameter("@2",txtTenKH.Text),
+                            new SqlParameter("@3",txtCCCD.Text),
+                            new SqlParameter("@4",GioiTinh),
+                            new SqlParameter("@5",dtpNgaySinh.Value.ToShortDateString()),
+                            new SqlParameter("@6",txtDiaChi.Text),
+                            new SqlParameter("@7",txtDienThoai.Text),
+                            new SqlParameter("@8",FeedBack),
+                            new SqlParameter("@9",txtBank.Text),
+                            new SqlParameter("@10",txtGhiChu.Text)
+                        };
+                        string[] fieldCondition = { "MaKH" };
+                        SqlParameter[] parameterCondition = new SqlParameter[]
+                        {
+                            new SqlParameter("@11",dtgKH.Rows[numrow].Cells[0].Value.ToString())
+                        };
+                        f.UpdateDataTable("KhachHang",field,parameter,fieldCondition,parameterCondition);
+                        dtgKH.DataSource = f.ReadData("KhachHang","1","1");
+                        
                     }
                 }
                 else
@@ -193,21 +192,8 @@ namespace DoAn
         }
         public void clear_whitespace()
         {
-            txtMaKH.Text = txtMaKH.Text.Trim();
-            txtTenKH.Text = txtTenKH.Text.Trim();
-            txtDiaChi.Text = txtDiaChi.Text.Trim();
-            txtDienThoai.Text = txtDienThoai.Text.Trim();
-            txtBank.Text = txtBank.Text.Trim();
-            txtGhiChu.Text = txtGhiChu.Text.Trim();
-            txtCCCD.Text = txtCCCD.Text.Trim();
-            Regex trimmer = new Regex(@"\s\s+"); // Xoá khoảng trắng thừa trong chuỗi 
-            txtMaKH.Text = trimmer.Replace(txtMaKH.Text, " ");
-            txtTenKH.Text = trimmer.Replace(txtTenKH.Text, " ");
-            txtDiaChi.Text = trimmer.Replace(txtDiaChi.Text, " ");
-            txtDienThoai.Text = trimmer.Replace(txtDienThoai.Text, " ");
-            txtBank.Text = trimmer.Replace(txtBank.Text, " ");
-            txtGhiChu.Text = trimmer.Replace(txtGhiChu.Text, " ");
-            txtCCCD.Text = trimmer.Replace(txtCCCD.Text, " ");
+            TextBox[] txt = {txtMaKH, txtTenKH, txtDiaChi, txtDienThoai, txtBank, txtGhiChu, txtCCCD};
+            f.clear_whitespace(txt);
         }
 
         private void FormKhachHang_Load(object sender, EventArgs e)
@@ -218,14 +204,9 @@ namespace DoAn
             btnTimKiemKH.Enabled = true;
             pnKH.Visible = false;
             dtgKH.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            conn.Open();
-            string QuerrySelect = "select *  from dbo.KhachHang";
-            SqlCommand cmd = new SqlCommand(QuerrySelect, conn);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dtgKH.DataSource = dt;
-            conn.Close();
+            dtgKH.DataSource = dtgKH.DataSource = f.ReadData("KhachHang", "1", "1");
+            ;
+
         }
 
         private void btnSuaKH_Click(object sender, EventArgs e)
@@ -242,20 +223,14 @@ namespace DoAn
         {
             if (checkClickdtg)
             {
-                string QuerryDelete = "delete from  dbo.KhachHang where MaKH = '" + dtgKH.Rows[numrow].Cells[0].Value.ToString() + "'"; 
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(QuerryDelete, conn);
-                cmd.ExecuteNonQuery();
-                conn.Close();
+                string[] fieldCondition = { "MaKH" };
+                SqlParameter[] parameterCondition = new SqlParameter[]
+                {
+                    new SqlParameter("@1",dtgKH.Rows[numrow].Cells[0].Value.ToString())
+                };
+                f.DeleteDataTable("KhachHang",fieldCondition,parameterCondition);
                 dtgKH.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                conn.Open();
-                string QuerrySelect = "select *  from dbo.KhachHang";
-                SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
-                SqlDataAdapter da = new SqlDataAdapter(cmd1);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                dtgKH.DataSource = dt;
-                conn.Close();
+                dtgKH.DataSource = f.ReadData("KhachHang","1","1");
             }
             else
             {
@@ -296,7 +271,7 @@ namespace DoAn
                 {
                     radTe.Checked = true;
                 }
-                string date = dtgKH.Rows[numrow].Cells[3].Value.ToString();
+                string date = dtgKH.Rows[numrow].Cells[3].Value.ToString(); 
                 string[] Split = date.Split('/');
                 dtpNgaySinh.Value = new DateTime(int.Parse(Split[2]), int.Parse(Split[1]), int.Parse(Split[0]));
                 txtMaKH.Text = dtgKH.Rows[numrow].Cells[0].Value.ToString();
@@ -318,18 +293,12 @@ namespace DoAn
             CheckInputTxt();
             if (!checkError)
             {
-                conn.Open();
-                string QuerryCheckMa = "select MaKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'";
-                SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                SqlDataReader dta = cmd.ExecuteReader();
-                if (dta.Read() == true)
+                if (f.Select_TblCheck("MaKH", "KhachHang", "MaKH", txtMaKH.Text))
                 {
-                    ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng đã tồn tại");
-                    conn.Close();
+                    f.ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng đã tồn tại");
                 }
                 else
                 {
-                    conn.Close();
                     string GioiTinh=string.Empty;
                     string FeedBack=string.Empty;
                     if (radNam.Checked == true)
@@ -352,30 +321,25 @@ namespace DoAn
                     {
                         FeedBack = "Tệ";
                     }
-                    conn.Open();
-                    string QuerryInsert = "insert into dbo.KhachHang(MaKH,TenKH,CCCD,NgaySinhKH,GioiTinhKH,DiaChiKH,DienThoaiKH,FeedBack,Bank,GhiChu)" +
-                        "values ('" + txtMaKH.Text + "',N'" + txtTenKH.Text + "',N'"+txtCCCD.Text+"','"+dtpNgaySinh.Value.ToShortDateString() +"',N'"+ GioiTinh+"',N'" + txtDiaChi.Text + "','" +
-                        txtDienThoai.Text + "',N'" + FeedBack + "',N'" + txtBank.Text + "',N'" + txtGhiChu.Text + "')";
-                    SqlCommand cmd1 = new SqlCommand(QuerryInsert, conn);
-                    cmd1.ExecuteNonQuery();
-                    conn.Close();
+                    SqlParameter[] parameter = new SqlParameter[]
+                       {
+                            new SqlParameter("@1",txtMaKH.Text),
+                            new SqlParameter("@2",txtTenKH.Text),
+                            new SqlParameter("@3",txtCCCD.Text),
+                            new SqlParameter("@4",dtpNgaySinh.Value.ToShortDateString()),
+                            new SqlParameter("@5",GioiTinh),
+                            new SqlParameter("@6",txtDiaChi.Text),
+                            new SqlParameter("@7",txtDienThoai.Text),
+                            new SqlParameter("@8",FeedBack),
+                            new SqlParameter("@9",txtBank.Text),
+                            new SqlParameter("@10",txtGhiChu.Text)
+                       };
+                    f.InsertDataIntoTable("KhachHang(MaKH, TenKH, CCCD, NgaySinhKH, GioiTinhKH, DiaChiKH, DienThoaiKH, FeedBack, Bank, GhiChu)",parameter);
                     ResetTextBox();
-                    conn.Open();
-                    string QuerrySelect = "select *  from dbo.KhachHang";
-                    SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
-                    SqlDataAdapter da = new SqlDataAdapter(cmd2);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dtgKH.DataSource = dt;
-                    conn.Close();
+                    dtgKH.DataSource = f.ReadData("KhachHang","1","1");
                 }
             }
         }
-        private void dtgKH_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
         private void txtTimKiem_TextChanged(object sender, EventArgs e)
         {
             if (txtTimKiem.Text != "")
@@ -386,23 +350,12 @@ namespace DoAn
             {
                 lblTimKiem.Visible = true;
             }
-            string QuerrySelect = "select *  from dbo.KhachHang where MaKH LIKE '%" + txtTimKiem.Text + "%'" +
-              "or TenKH LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or DiaChiKH LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or DienThoaiKH LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or GioiTinhKH LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or NgaySinhKH LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or Bank LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or FeedBack LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or CCCD LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or GhiChu LIKE N'%" + txtTimKiem.Text + "%'";
-            conn.Open();
-            SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
-            SqlDataAdapter da = new SqlDataAdapter(cmd1);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dtgKH.DataSource = dt;
-            conn.Close();
+            string[] fieldCondition = { "MaKH", "TenKH", "DiaChiKH", "DienThoaiKH", "GioiTinhKH","NgaySinhKH","Bank","FeedBack","CCCD","GhiChu" };
+            SqlParameter[] parameterCondition = new SqlParameter[]
+            {
+                new SqlParameter("@1","%"+txtTimKiem.Text+"%")
+            };
+            dtgKH.DataSource = f.SelectCondition("KhachHang",fieldCondition,parameterCondition);
         }
 
         private void lblTimKiem_Click(object sender, EventArgs e)
@@ -428,11 +381,6 @@ namespace DoAn
         private void txtTimKiem_MouseClick(object sender, MouseEventArgs e)
         {
             lblTimKiem.Visible = false;
-        }
-
-        private void panel2_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

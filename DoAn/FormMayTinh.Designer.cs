@@ -87,11 +87,11 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.cbLietKe = new DevExpress.XtraEditors.ComboBoxEdit();
             this.pnInputSearch = new System.Windows.Forms.Panel();
             this.btnXTimKiem = new System.Windows.Forms.PictureBox();
             this.lblTimKiem = new System.Windows.Forms.Label();
             this.txtTimKiem = new System.Windows.Forms.TextBox();
+            this.cbLietKe = new System.Windows.Forms.ComboBox();
             this.btnThemMT = new DoAn.VBButton();
             this.btnTimKiemMT = new DoAn.VBButton();
             this.btnXoaMT = new DoAn.VBButton();
@@ -101,7 +101,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dtgMayTinh)).BeginInit();
             this.pnMayTinh.SuspendLayout();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.cbLietKe.Properties)).BeginInit();
             this.pnInputSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnXTimKiem)).BeginInit();
             this.SuspendLayout();
@@ -183,7 +182,6 @@
             this.txtMaMayTinh.Name = "txtMaMayTinh";
             this.txtMaMayTinh.Size = new System.Drawing.Size(253, 26);
             this.txtMaMayTinh.TabIndex = 1;
-            this.txtMaMayTinh.TextChanged += new System.EventHandler(this.txtMaMayTinh_TextChanged);
             // 
             // label9
             // 
@@ -264,7 +262,6 @@
             this.dtgMayTinh.Size = new System.Drawing.Size(1181, 809);
             this.dtgMayTinh.TabIndex = 23;
             this.dtgMayTinh.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgMayTinh_CellClick);
-            this.dtgMayTinh.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgMayTinh_CellContentClick);
             // 
             // clnMPN
             // 
@@ -274,7 +271,7 @@
             this.clnMPN.MinimumWidth = 8;
             this.clnMPN.Name = "clnMPN";
             this.clnMPN.ReadOnly = true;
-            this.clnMPN.Width = 120;
+            this.clnMPN.Width = 130;
             // 
             // clnNLPN
             // 
@@ -284,7 +281,7 @@
             this.clnNLPN.MinimumWidth = 8;
             this.clnNLPN.Name = "clnNLPN";
             this.clnNLPN.ReadOnly = true;
-            this.clnNLPN.Width = 125;
+            this.clnNLPN.Width = 135;
             // 
             // clnMCT
             // 
@@ -731,7 +728,6 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
-            this.panel2.Controls.Add(this.cbLietKe);
             this.panel2.Controls.Add(this.pnInputSearch);
             this.panel2.Controls.Add(this.btnThemMT);
             this.panel2.Controls.Add(this.btnTimKiemMT);
@@ -742,29 +738,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1262, 208);
             this.panel2.TabIndex = 0;
-            // 
-            // cbLietKe
-            // 
-            this.cbLietKe.EditValue = "none";
-            this.cbLietKe.Location = new System.Drawing.Point(58, 121);
-            this.cbLietKe.Margin = new System.Windows.Forms.Padding(4);
-            this.cbLietKe.Name = "cbLietKe";
-            this.cbLietKe.Properties.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbLietKe.Properties.Appearance.Options.UseFont = true;
-            this.cbLietKe.Properties.AutoComplete = false;
-            this.cbLietKe.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.cbLietKe.Properties.Items.AddRange(new object[] {
-            "none",
-            "Dưới 10 triệu",
-            "Từ 10 - 15 triệu",
-            "Từ 15 - 20 triệu",
-            "Từ 20 - 30 triệu",
-            "Trên 30 triệu"});
-            this.cbLietKe.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            this.cbLietKe.Size = new System.Drawing.Size(209, 36);
-            this.cbLietKe.TabIndex = 5;
-            this.cbLietKe.SelectedIndexChanged += new System.EventHandler(this.cbLietKe_SelectedIndexChanged);
             // 
             // pnInputSearch
             // 
@@ -817,6 +790,24 @@
             this.txtTimKiem.MouseClick += new System.Windows.Forms.MouseEventHandler(this.txtTimKiem_MouseClick);
             this.txtTimKiem.TextChanged += new System.EventHandler(this.txtTimKiem_TextChanged);
             this.txtTimKiem.MouseLeave += new System.EventHandler(this.txtTimKiem_MouseLeave);
+            // 
+            // cbLietKe
+            // 
+            this.cbLietKe.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbLietKe.FormattingEnabled = true;
+            this.cbLietKe.Items.AddRange(new object[] {
+            "none",
+            "Dưới 10 triệu",
+            "Từ 10 - 15 triệu",
+            "Từ 15 - 20 triệu",
+            "Từ 20 - 30 triệu",
+            "Trên 30 triệu"});
+            this.cbLietKe.Location = new System.Drawing.Point(45, 194);
+            this.cbLietKe.Name = "cbLietKe";
+            this.cbLietKe.Size = new System.Drawing.Size(221, 40);
+            this.cbLietKe.TabIndex = 6;
+            this.cbLietKe.Text = "Liệt Kê Giá";
+            this.cbLietKe.SelectedIndexChanged += new System.EventHandler(this.cbLietKe_SelectedIndexChanged_1);
             // 
             // btnThemMT
             // 
@@ -929,6 +920,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1618, 1080);
+            this.Controls.Add(this.cbLietKe);
             this.Controls.Add(this.dtgMayTinh);
             this.Controls.Add(this.pnMayTinh);
             this.Controls.Add(this.panel2);
@@ -942,7 +934,6 @@
             this.pnMayTinh.ResumeLayout(false);
             this.pnMayTinh.PerformLayout();
             this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.cbLietKe.Properties)).EndInit();
             this.pnInputSearch.ResumeLayout(false);
             this.pnInputSearch.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btnXTimKiem)).EndInit();
@@ -1015,6 +1006,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn clnMNV;
         private System.Windows.Forms.DataGridViewTextBoxColumn clnGC;
-        private DevExpress.XtraEditors.ComboBoxEdit cbLietKe;
+        private System.Windows.Forms.ComboBox cbLietKe;
     }
 }

@@ -47,7 +47,7 @@
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.pnNV = new System.Windows.Forms.Panel();
-            this.txtChucVu = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.txtChucVu = new System.Windows.Forms.ComboBox();
             this.dtpNgaySinh = new System.Windows.Forms.DateTimePicker();
             this.radNu = new System.Windows.Forms.RadioButton();
             this.radNam = new System.Windows.Forms.RadioButton();
@@ -101,7 +101,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dtgTK)).BeginInit();
             this.tabPage1.SuspendLayout();
             this.pnNV.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtChucVu.Properties)).BeginInit();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgNV)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -150,7 +149,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(615, 341);
             this.panel1.TabIndex = 6;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // btnDelete
             // 
@@ -186,7 +184,7 @@
             this.btnSave.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.btnSave.TabIndex = 30;
             this.btnSave.TabStop = false;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click_1);
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // txtMatKhau
             // 
@@ -316,21 +314,19 @@
             // 
             // txtChucVu
             // 
-            this.txtChucVu.Location = new System.Drawing.Point(30, 528);
-            this.txtChucVu.Margin = new System.Windows.Forms.Padding(4);
-            this.txtChucVu.Name = "txtChucVu";
-            this.txtChucVu.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.txtChucVu.Properties.Items.AddRange(new object[] {
+            this.txtChucVu.Font = new System.Drawing.Font("Times New Roman", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtChucVu.FormattingEnabled = true;
+            this.txtChucVu.Items.AddRange(new object[] {
             "Quản lý",
             "Nhân viên bán hàng",
             "Kế toán",
             "Thủ kho",
             "Nhân viên chăm sóc khách hàng",
             "Nhân viên nhập xuất hàng"});
-            this.txtChucVu.Properties.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
-            this.txtChucVu.Size = new System.Drawing.Size(275, 26);
-            this.txtChucVu.TabIndex = 9;
+            this.txtChucVu.Location = new System.Drawing.Point(30, 527);
+            this.txtChucVu.Name = "txtChucVu";
+            this.txtChucVu.Size = new System.Drawing.Size(276, 33);
+            this.txtChucVu.TabIndex = 35;
             // 
             // dtpNgaySinh
             // 
@@ -480,7 +476,6 @@
             this.txtTenNV.Name = "txtTenNV";
             this.txtTenNV.Size = new System.Drawing.Size(276, 26);
             this.txtTenNV.TabIndex = 2;
-            this.txtTenNV.TextChanged += new System.EventHandler(this.txtTenNV_TextChanged);
             // 
             // txtMaNV
             // 
@@ -490,7 +485,6 @@
             this.txtMaNV.Name = "txtMaNV";
             this.txtMaNV.Size = new System.Drawing.Size(276, 26);
             this.txtMaNV.TabIndex = 1;
-            this.txtMaNV.TextChanged += new System.EventHandler(this.txtMaNV_TextChanged);
             // 
             // label15
             // 
@@ -590,7 +584,6 @@
             this.label2.Size = new System.Drawing.Size(152, 26);
             this.label2.TabIndex = 25;
             this.label2.Text = "Tên nhân viên:";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label1
             // 
@@ -602,7 +595,6 @@
             this.label1.Size = new System.Drawing.Size(145, 26);
             this.label1.TabIndex = 24;
             this.label1.Text = "Mã nhân viên:";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // panel2
             // 
@@ -746,7 +738,6 @@
             this.dtgNV.Size = new System.Drawing.Size(1191, 885);
             this.dtgNV.TabIndex = 36;
             this.dtgNV.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgNV_CellClick_1);
-            this.dtgNV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgNV_CellContentClick);
             // 
             // Column2
             // 
@@ -872,7 +863,6 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1618, 1080);
             this.tabControl1.TabIndex = 0;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // FormNhanVien
             // 
@@ -897,7 +887,6 @@
             this.tabPage1.ResumeLayout(false);
             this.pnNV.ResumeLayout(false);
             this.pnNV.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtChucVu.Properties)).EndInit();
             this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtgNV)).EndInit();
             this.tabControl1.ResumeLayout(false);
@@ -965,7 +954,7 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox btnDelete;
         private System.Windows.Forms.PictureBox btnInsert;
-        private DevExpress.XtraEditors.ComboBoxEdit txtChucVu;
         private VBButton btnBangLuong;
+        private System.Windows.Forms.ComboBox txtChucVu;
     }
 }

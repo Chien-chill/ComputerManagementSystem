@@ -50,19 +50,17 @@
             this.txtMatKhau.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMatKhau.Location = new System.Drawing.Point(143, 254);
             this.txtMatKhau.Name = "txtMatKhau";
-            this.txtMatKhau.Size = new System.Drawing.Size(209, 24);
+            this.txtMatKhau.Size = new System.Drawing.Size(209, 33);
             this.txtMatKhau.TabIndex = 3;
             this.txtMatKhau.UseSystemPasswordChar = true;
-            this.txtMatKhau.TextChanged += new System.EventHandler(this.txtMatKhau_TextChanged);
             // 
             // txtTaiKhoan
             // 
             this.txtTaiKhoan.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTaiKhoan.Location = new System.Drawing.Point(143, 201);
             this.txtTaiKhoan.Name = "txtTaiKhoan";
-            this.txtTaiKhoan.Size = new System.Drawing.Size(209, 24);
+            this.txtTaiKhoan.Size = new System.Drawing.Size(209, 33);
             this.txtTaiKhoan.TabIndex = 6;
-            this.txtTaiKhoan.TextChanged += new System.EventHandler(this.txtTaiKhoan_TextChanged);
             // 
             // lblQuenMatKhau
             // 
@@ -72,7 +70,7 @@
             this.lblQuenMatKhau.ForeColor = System.Drawing.SystemColors.Highlight;
             this.lblQuenMatKhau.Location = new System.Drawing.Point(301, 302);
             this.lblQuenMatKhau.Name = "lblQuenMatKhau";
-            this.lblQuenMatKhau.Size = new System.Drawing.Size(51, 15);
+            this.lblQuenMatKhau.Size = new System.Drawing.Size(78, 22);
             this.lblQuenMatKhau.TabIndex = 8;
             this.lblQuenMatKhau.Text = "Hỗ Trợ?";
             this.lblQuenMatKhau.Click += new System.EventHandler(this.lblQuenMatKhau_Click);
@@ -96,7 +94,6 @@
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 7;
             this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
             // 
             // pictureBox1
             // 
@@ -111,12 +108,13 @@
             // 
             // BtnDangNhap
             // 
-            this.BtnDangNhap.BackColor = System.Drawing.SystemColors.Highlight;
-            this.BtnDangNhap.Font = new System.Drawing.Font("Times New Roman", 11.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnDangNhap.BackColor = System.Drawing.Color.LimeGreen;
+            this.BtnDangNhap.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.BtnDangNhap.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.BtnDangNhap.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.BtnDangNhap.Location = new System.Drawing.Point(199, 325);
             this.BtnDangNhap.Name = "BtnDangNhap";
-            this.BtnDangNhap.Size = new System.Drawing.Size(96, 23);
+            this.BtnDangNhap.Size = new System.Drawing.Size(96, 30);
             this.BtnDangNhap.TabIndex = 12;
             this.BtnDangNhap.Text = "Đăng Nhập";
             this.BtnDangNhap.UseVisualStyleBackColor = false;
@@ -146,10 +144,9 @@
             // 
             // frmDangNhap
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(450, 366);
             this.Controls.Add(this.ptbHide);
             this.Controls.Add(this.ptbShow);
@@ -164,11 +161,9 @@
             this.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.IsMdiContainer = true;
             this.Name = "frmDangNhap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Đăng Nhập";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmDangNhap_FormClosing);
             this.Load += new System.EventHandler(this.frmDangNhap_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();

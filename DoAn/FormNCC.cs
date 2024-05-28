@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevExpress.XtraPrinting;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,8 +15,8 @@ namespace DoAn
 {
     public partial class FormNCC : Form
     {
-        SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\PC\source\repos\QuanLyMayTinh\DoAn\DatabaseQuanLy.mdf;Integrated Security=True");
         bool CheckClickBtnSua = false;
+        Functions f = new Functions();
         public FormNCC()
         {
             InitializeComponent();
@@ -31,48 +32,49 @@ namespace DoAn
             btnTimKiemNCC.Enabled = false;
         }
         bool checkError = false;
-        public void ErrorWarning(ErrorProvider error, TextBox txt, string message)
-        {
-            error.SetError(txt, message);
-            txt.Focus();
-            checkError = true;
-            conn.Close();
-        }
         public void CheckInputTxt()
         {
             int songuyen = 0;
 
             if (txtMaCT.Text == "")
             {
-                ErrorWarning(errorProvider1, txtMaCT, "Chưa nhập mã công ty");
+                f.ErrorWarning(errorProvider1, txtMaCT, "Chưa nhập mã công ty");
+                checkError = true;
             }
             else if (txtTenCT.Text == "")
             {
-                ErrorWarning(errorProvider1, txtTenCT, "Chưa nhập tên công ty");
+                f.ErrorWarning(errorProvider1, txtTenCT, "Chưa nhập tên công ty");
+                checkError = true;
             }
             else if (txtDiaChiCT.Text == "")
             {
-                ErrorWarning(errorProvider1, txtDiaChiCT, "Chưa nhập địa chỉ");
+                f.ErrorWarning(errorProvider1, txtDiaChiCT, "Chưa nhập địa chỉ");
+                    checkError = true;
             }
             else if (txtDienThoaiCT.Text == "")
             {
-                ErrorWarning(errorProvider1, txtDienThoaiCT, "Chưa nhập số điện thoại");
+                f.ErrorWarning(errorProvider1, txtDienThoaiCT, "Chưa nhập số điện thoại");
+                checkError = true;
             }
             else if (int.TryParse(txtDienThoaiCT.Text, out songuyen) == false || int.Parse(txtDienThoaiCT.Text) <= 0)
             {
-                ErrorWarning(errorProvider1, txtDienThoaiCT, "Sai định dạng số điện thoại");
+                f.ErrorWarning(errorProvider1, txtDienThoaiCT, "Sai định dạng số điện thoại");
+                checkError = true;
             }
             else if (txtEmail.Text == "")
             {
-                ErrorWarning(errorProvider1, txtEmail, "Chưa nhập Email");
+                f.ErrorWarning(errorProvider1, txtEmail, "Chưa nhập Email");
+                    checkError = true;
             }
             else if (txtWebsite.Text == "")
             {
-                ErrorWarning(errorProvider1, txtWebsite, "Chưa nhập Website");
+                f.ErrorWarning(errorProvider1, txtWebsite, "Chưa nhập Website");
+                checkError = true;
             }
             else if (txtBank.Text == "")
             {
-                ErrorWarning(errorProvider1, txtBank, "Chưa nhập bảo hành");
+                f.ErrorWarning(errorProvider1, txtBank, "Chưa nhập bảo hành");
+                checkError = true;
             }
         }
         public void ResetTextBox()
@@ -95,34 +97,28 @@ namespace DoAn
             CheckInputTxt();
             if (!checkError)
             {
-                conn.Open();
-                string QuerryCheckMa = "select MaCT from dbo.CongTy where MaCT = '" + txtMaCT.Text + "'";
-                SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                SqlDataReader dta = cmd.ExecuteReader();
-                if (dta.Read() == true)
+                if (f.Select_TblCheck("MaCT","CongTy","MaCT",txtMaCT.Text))
                 {
-                    ErrorWarning(errorProvider1, txtMaCT, "Mã công ty đã tồn tại");
-                    conn.Close();
+                    f.ErrorWarning(errorProvider1, txtMaCT, "Mã công ty đã tồn tại");
+                    checkError = true;
                 }
                 else
                 {
-                    conn.Close();
-                    conn.Open();
-                    string QuerryInsert = "insert into dbo.CongTy(MaCT,TenCT,DiaChiCT,DienThoaiCT,Email,Website,Bank,GhiChu)" +
-                        "values ('" + txtMaCT.Text + "',N'" + txtTenCT.Text + "',N'" + txtDiaChiCT.Text + "','" + 
-                        txtDienThoaiCT.Text + "',N'"+txtEmail.Text+"',N'"+txtWebsite.Text+"',N'" + txtBank.Text + "',N'" + txtGhiChu.Text + "')";
-                    SqlCommand cmd1 = new SqlCommand(QuerryInsert, conn);
-                    cmd1.ExecuteNonQuery();
-                    conn.Close();
+                    SqlParameter[] parameter = new SqlParameter[]
+                    {
+                        new SqlParameter("@1",txtMaCT.Text),
+                        new SqlParameter("@2",txtTenCT.Text),
+                        new SqlParameter("@3",txtDiaChiCT.Text),
+                        new SqlParameter("@4",txtDienThoaiCT.Text),
+                        new SqlParameter("@5",txtEmail.Text),
+                        new SqlParameter("@6",txtWebsite.Text),
+                        new SqlParameter("@7",txtBank.Text),
+                        new SqlParameter("@8",txtGhiChu.Text)
+                    };
+
+                    f.InsertDataIntoTable("dbo.CongTy(MaCT,TenCT,DiaChiCT,DienThoaiCT,Email,Website,Bank,GhiChu)", parameter);
                     ResetTextBox();
-                    conn.Open();
-                    string QuerrySelect = "select *  from dbo.CongTy";
-                    SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
-                    SqlDataAdapter da = new SqlDataAdapter(cmd2);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dtgNCC.DataSource = dt;
-                    conn.Close();
+                    dtgNCC.DataSource = f.ReadData("CongTy","1","1");
                 }
             }
         }
@@ -138,32 +134,32 @@ namespace DoAn
                 if (checkClickdtg)
                 {
                     checkClickdtg = false;
-                    conn.Open();
-                    string QuerryCheckMa = "select MaCT from dbo.CongTy where MaCT = '" + txtMaCT.Text + "'";
-                    SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                    SqlDataReader dta = cmd.ExecuteReader();
-                    if (dta.Read() == true && txtMaCT.Text != dtgNCC.Rows[numrow].Cells[0].Value.ToString())
+                    if (f.Select_TblCheck("MaCT", "CongTy", "MaCT", txtMaCT.Text) && txtMaCT.Text != dtgNCC.Rows[numrow].Cells[0].Value.ToString())
                     {
-                        ErrorWarning(errorProvider1, txtMaCT, "Mã công ty đã tồn tại");
-                        conn.Close();
+                        f.ErrorWarning(errorProvider1, txtMaCT, "Mã công ty đã tồn tại");
+                        checkError = true;
                     }
                     else
                     {
-                        conn.Close();
-                        conn.Open();
-                        string QuerryUpdate = " Update dbo.CongTy set MaCT = '" + txtMaCT.Text + "',TenCT = N'" + txtTenCT.Text + "',DiaChiCT =N'" + txtDiaChiCT.Text + "',DienThoaiCT = N'" + txtDienThoaiCT.Text + "'," +
-                            "Email=N'" + txtEmail.Text + "',Website = N'" + txtWebsite.Text + "',Bank=N'" + txtBank.Text + "',GhiChu=N'" + txtGhiChu.Text + "' where MaCT = '" + dtgNCC.Rows[numrow].Cells[0].Value.ToString() + "'";
-                        SqlCommand cmd1 = new SqlCommand(QuerryUpdate, conn);
-                        cmd1.ExecuteNonQuery();
-                        conn.Close();
-                        conn.Open();
-                        string QuerrySelect = "select *  from dbo.CongTy";
-                        SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
-                        SqlDataAdapter da = new SqlDataAdapter(cmd2);
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-                        dtgNCC.DataSource = dt;
-                        conn.Close();
+                        string[] field = { "MaCT", "TenCT", "DiaChiCT", "DienThoaiCT", "Email", "Website", "Bank", "GhiChu" };
+                        SqlParameter[] parameter = new SqlParameter[]
+                     {
+                        new SqlParameter("@1",txtMaCT.Text),
+                        new SqlParameter("@2",txtTenCT.Text),
+                        new SqlParameter("@3",txtDiaChiCT.Text),
+                        new SqlParameter("@4",txtDienThoaiCT.Text),
+                        new SqlParameter("@5",txtEmail.Text),
+                        new SqlParameter("@6",txtWebsite.Text),
+                        new SqlParameter("@7",txtBank.Text),
+                        new SqlParameter("@8",txtGhiChu.Text)
+                     };
+                        string[] fieldCondition = { "MaCT" };
+                        SqlParameter[] parameterCondition = new SqlParameter[]
+                        {
+                            new SqlParameter("@9",dtgNCC.Rows[numrow].Cells[0].Value.ToString())
+                        };
+                        f.UpdateDataTable("CongTy", field, parameter, fieldCondition,parameterCondition);
+                        dtgNCC.DataSource = f.ReadData("CongTy", "1", "1");
                     }
                 }
                 else
@@ -185,23 +181,8 @@ namespace DoAn
         }
         public void clear_whitespace()
         {
-            txtMaCT.Text = txtMaCT.Text.Trim();
-            txtTenCT.Text = txtTenCT.Text.Trim();
-            txtDiaChiCT.Text = txtDiaChiCT.Text.Trim();
-            txtDienThoaiCT.Text = txtDienThoaiCT.Text.Trim();
-            txtBank.Text = txtBank.Text.Trim();
-            txtGhiChu.Text = txtGhiChu.Text.Trim();
-            txtEmail.Text = txtEmail.Text.Trim();
-            txtWebsite.Text = txtWebsite.Text.Trim();
-            Regex trimmer = new Regex(@"\s\s+"); // Xoá khoảng trắng thừa trong chuỗi 
-            txtMaCT.Text = trimmer.Replace(txtMaCT.Text, " ");
-            txtTenCT.Text = trimmer.Replace(txtTenCT.Text, " ");
-            txtDiaChiCT.Text = trimmer.Replace(txtDiaChiCT.Text, " ");
-            txtDienThoaiCT.Text = trimmer.Replace(txtDienThoaiCT.Text, " ");
-            txtBank.Text = trimmer.Replace(txtBank.Text, " ");
-            txtGhiChu.Text = trimmer.Replace(txtGhiChu.Text, " ");
-            txtEmail.Text = trimmer.Replace(txtEmail.Text, " ");
-            txtWebsite.Text = trimmer.Replace(txtWebsite.Text, " ");
+            TextBox[] txt = {txtMaCT, txtTenCT, txtDiaChiCT, txtDienThoaiCT, txtBank, txtGhiChu, txtEmail, txtWebsite};
+            f.clear_whitespace(txt);
         }
 
         private void FormNCC_Load(object sender, EventArgs e)
@@ -212,14 +193,7 @@ namespace DoAn
             btnTimKiemNCC.Enabled = true;
             pnNCC.Visible = false;
             dtgNCC.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            conn.Open();
-            string QuerrySelect = "select *  from dbo.CongTy";
-            SqlCommand cmd = new SqlCommand(QuerrySelect, conn);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dtgNCC.DataSource = dt;
-            conn.Close();
+            dtgNCC.DataSource = f.ReadData("CongTy", "1", "1");
         }
 
         private void btnSuaNCC_Click(object sender, EventArgs e)
@@ -236,20 +210,14 @@ namespace DoAn
         {
             if (checkClickdtg)
             {
-                string QuerryDelete = "delete from  dbo.CongTy where MaCT = '" + dtgNCC.Rows[numrow].Cells[0].Value.ToString() + "'";
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(QuerryDelete, conn);
-                cmd.ExecuteNonQuery();
-                conn.Close();
+                string[] fieldCondition = { "MaCT" };
+                SqlParameter[] parameterCondition = new SqlParameter[]
+                {
+                    new SqlParameter("@1",dtgNCC.Rows[numrow].Cells[0].Value.ToString())
+                };
+                f.DeleteDataTable("CongTy", fieldCondition, parameterCondition);
                 dtgNCC.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                string QuerrySelect = "select *  from dbo.CongTy";
-                conn.Open();
-                SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
-                SqlDataAdapter da = new SqlDataAdapter(cmd1);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                dtgNCC.DataSource = dt;
-                conn.Close();
+                dtgNCC.DataSource = f.ReadData("CongTy", "1", "1");
             }
             else
             {
@@ -298,21 +266,12 @@ namespace DoAn
             {
                 lblTimKiem.Visible = true;
             }
-            string QuerrySelect = "select *  from dbo.CongTy where MaCT LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or TenCT LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or DiaChiCT LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or DienThoaiCT LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or Email LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or Website LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or Bank LIKE N'%" + txtTimKiem.Text + "%'" +
-              "or GhiChu LIKE N'%" + txtTimKiem.Text + "%'";
-            conn.Open();
-            SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
-            SqlDataAdapter da = new SqlDataAdapter(cmd1);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dtgNCC.DataSource = dt;
-            conn.Close();
+            string[] fieldCondition = { "MaCT", "TenCT", "DiaChiCT", "DienThoaiCT", "Email", "Website", "Bank", "GhiChu" };
+            SqlParameter[] parameterCondition = new SqlParameter[]
+           {
+                new SqlParameter("@1","%" + txtTimKiem.Text + "%")
+           };
+            dtgNCC.DataSource = f.SelectCondition("CongTy", fieldCondition, parameterCondition);
         }
 
         private void lblTimKiem_Click(object sender, EventArgs e)
@@ -337,16 +296,6 @@ namespace DoAn
             txtTimKiem.Text = "";
             pnInputSearch.Visible = false;
             FormNCC_Load(sender, e);
-        }
-
-        private void txtWebsite_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dtgNCC_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }

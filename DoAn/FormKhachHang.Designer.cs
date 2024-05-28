@@ -277,7 +277,6 @@
             this.dtgKH.Size = new System.Drawing.Size(1181, 809);
             this.dtgKH.TabIndex = 27;
             this.dtgKH.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgKH_CellClick);
-            this.dtgKH.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgKH_CellContentClick);
             // 
             // Column2
             // 
@@ -473,7 +472,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1262, 208);
             this.panel2.TabIndex = 26;
-            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // btnThemKH
             // 
@@ -625,7 +623,6 @@
             this.dtpNgaySinh.Size = new System.Drawing.Size(174, 26);
             this.dtpNgaySinh.TabIndex = 6;
             this.dtpNgaySinh.Value = new System.DateTime(2023, 11, 22, 0, 0, 0, 0);
-            this.dtpNgaySinh.ValueChanged += new System.EventHandler(this.dtpNgaySinh_ValueChanged);
             // 
             // groupBox1
             // 
@@ -702,7 +699,6 @@
             this.radHaiLong.TabStop = true;
             this.radHaiLong.Text = "Hài lòng";
             this.radHaiLong.UseVisualStyleBackColor = true;
-            this.radHaiLong.CheckedChanged += new System.EventHandler(this.radHaiLong_CheckedChanged);
             // 
             // radRatHaiLong
             // 

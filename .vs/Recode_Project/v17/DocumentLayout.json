@@ -1,0 +1,129 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\source\\repos\\QuanLyMayTinh\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|Laptop v8.5||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AF657EDC-67FE-48AD-AC94-AE458A2564AC}|DoAn\\Laptop v8.5.csproj|D:\\source\\repos\\QuanLyMayTinh\\doan\\functions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AF657EDC-67FE-48AD-AC94-AE458A2564AC}|DoAn\\Laptop v8.5.csproj|solutionrelative:doan\\functions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AF657EDC-67FE-48AD-AC94-AE458A2564AC}|DoAn\\Laptop v8.5.csproj|D:\\source\\repos\\QuanLyMayTinh\\doan\\dangnhap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AF657EDC-67FE-48AD-AC94-AE458A2564AC}|DoAn\\Laptop v8.5.csproj|solutionrelative:doan\\dangnhap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AF657EDC-67FE-48AD-AC94-AE458A2564AC}|DoAn\\Laptop v8.5.csproj|D:\\source\\repos\\QuanLyMayTinh\\doan\\formbanhang.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AF657EDC-67FE-48AD-AC94-AE458A2564AC}|DoAn\\Laptop v8.5.csproj|solutionrelative:doan\\formbanhang.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AF657EDC-67FE-48AD-AC94-AE458A2564AC}|DoAn\\Laptop v8.5.csproj|D:\\source\\repos\\QuanLyMayTinh\\doan\\dangnhap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{AF657EDC-67FE-48AD-AC94-AE458A2564AC}|DoAn\\Laptop v8.5.csproj|solutionrelative:doan\\dangnhap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AF657EDC-67FE-48AD-AC94-AE458A2564AC}|DoAn\\Laptop v8.5.csproj|D:\\source\\repos\\QuanLyMayTinh\\doan\\formnhanvien.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AF657EDC-67FE-48AD-AC94-AE458A2564AC}|DoAn\\Laptop v8.5.csproj|solutionrelative:doan\\formnhanvien.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AF657EDC-67FE-48AD-AC94-AE458A2564AC}|DoAn\\Laptop v8.5.csproj|d:\\source\\repos\\quanlymaytinh\\doan\\||{B270807C-D8C6-49EB-8EBE-8E8D566637A1}|cc4014f5-b18d-439c-9352-f99d984cca85"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DangNhap.cs [Design]",
+              "DocumentMoniker": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\DangNhap.cs",
+              "RelativeDocumentMoniker": "DoAn\\DangNhap.cs",
+              "ToolTip": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\DangNhap.cs [Design]",
+              "RelativeToolTip": "DoAn\\DangNhap.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T09:12:31.652Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FormBanHang.cs",
+              "DocumentMoniker": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\FormBanHang.cs",
+              "RelativeDocumentMoniker": "DoAn\\FormBanHang.cs",
+              "ToolTip": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\FormBanHang.cs",
+              "RelativeToolTip": "DoAn\\FormBanHang.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAUwLcAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T09:05:31.988Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DangNhap.cs",
+              "DocumentMoniker": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\DangNhap.cs",
+              "RelativeDocumentMoniker": "DoAn\\DangNhap.cs",
+              "ToolTip": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\DangNhap.cs",
+              "RelativeToolTip": "DoAn\\DangNhap.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAA0wCcAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-26T09:04:49.255Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Laptop v8.5",
+              "DocumentMoniker": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\Laptop v8.5.csproj",
+              "RelativeDocumentMoniker": "DoAn\\Laptop v8.5.csproj",
+              "ToolTip": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\Laptop v8.5.csproj*",
+              "RelativeToolTip": "DoAn\\Laptop v8.5.csproj*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-05-26T08:11:00.482Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FormNhanVien.cs",
+              "DocumentMoniker": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\FormNhanVien.cs",
+              "RelativeDocumentMoniker": "DoAn\\FormNhanVien.cs",
+              "ToolTip": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\FormNhanVien.cs",
+              "RelativeToolTip": "DoAn\\FormNhanVien.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAwAAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-25T14:07:18.252Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Functions.cs",
+              "DocumentMoniker": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\Functions.cs",
+              "RelativeDocumentMoniker": "DoAn\\Functions.cs",
+              "ToolTip": "D:\\source\\repos\\QuanLyMayTinh\\DoAn\\Functions.cs",
+              "RelativeToolTip": "DoAn\\Functions.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAgwFoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-21T07:35:02.286Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

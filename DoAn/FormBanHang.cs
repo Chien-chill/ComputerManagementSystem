@@ -14,7 +14,7 @@ namespace DoAn
 {
     public partial class FormBanHang : Form
     {
-        SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\PC\source\repos\QuanLyMayTinh\DoAn\DatabaseQuanLy.mdf;Integrated Security=True");
+        Functions f = new Functions();
         public FormBanHang()
         {
             InitializeComponent();
@@ -72,16 +72,6 @@ namespace DoAn
             btnMayTinh.BackColor = Color.White;
             loadform(new FormMayTinh());
         }
-
-        private void mainpanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void btnNhap_MouseClick(object sender, MouseEventArgs e)
-        {
-           
-        }
         public void ResetColor()
         {
             btnNhap.BackColor = Color.Aqua;
@@ -121,24 +111,8 @@ namespace DoAn
         }
         private void FormBanHang_Load(object sender, EventArgs e)
         {
-            conn.Open();
-            string QuerrySelectMaNV = "select MaNV from dbo.BoNhoTam ";
-            SqlCommand cmd2 = new SqlCommand(QuerrySelectMaNV, conn);
-            object GetMaNV = cmd2.ExecuteScalar();
-            conn.Close();
-            string MaNV = Convert.ToString(GetMaNV);
-            conn.Open();
-            string QuerrySelectTenNV = "select TenNV from dbo.NhanVien where MaNV = '"+MaNV+"'";
-            SqlCommand cmd3 = new SqlCommand(QuerrySelectTenNV, conn);
-            object GetTenNV = cmd3.ExecuteScalar();
-            conn.Close();
-            conn.Open();
-            string QuerrySelectChucVu = "select ChucVu from dbo.NhanVien where MaNV = '"+MaNV+"'";
-            SqlCommand cmd4 = new SqlCommand(QuerrySelectChucVu, conn);
-            object GetChucVu = cmd4.ExecuteScalar();
-            conn.Close();
-            string TenNV = Convert.ToString(GetTenNV);
-            string ChucVu = Convert.ToString(GetChucVu);
+            string TenNV = Convert.ToString(f.Select_TblNhanVien("TenNV"));
+            string ChucVu = Convert.ToString(f.Select_TblNhanVien("ChucVu"));
             lblTenNV.Text = TenNV;
             lblChucVu.Text = ChucVu;
             btnTrangChu_Click(sender, e);
@@ -207,32 +181,8 @@ namespace DoAn
 
         private void btnLogOut_Click(object sender, EventArgs e)
         {
-            string QuerryDelete = "delete from  dbo.BoNhoTam";
-            conn.Open();
-            SqlCommand cmd = new SqlCommand(QuerryDelete, conn);
-            cmd.ExecuteNonQuery();
-            conn.Close();
+            f.DeleteTemp();
             Close();
-        }
-
-        private void lblChucVu_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblTenNV_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panelbtn_Paint(object sender, PaintEventArgs e)
-        {
-
         }
     }
 }

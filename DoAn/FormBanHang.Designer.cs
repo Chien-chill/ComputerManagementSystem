@@ -71,7 +71,6 @@
             this.panelbtn.Name = "panelbtn";
             this.panelbtn.Size = new System.Drawing.Size(302, 1080);
             this.panelbtn.TabIndex = 1;
-            this.panelbtn.Paint += new System.Windows.Forms.PaintEventHandler(this.panelbtn_Paint);
             // 
             // label1
             // 
@@ -97,7 +96,6 @@
             this.lblChucVu.Size = new System.Drawing.Size(288, 53);
             this.lblChucVu.TabIndex = 3;
             this.lblChucVu.Text = "Chức Vụ";
-            this.lblChucVu.Click += new System.EventHandler(this.lblChucVu_Click);
             // 
             // lblTenNV
             // 
@@ -109,7 +107,6 @@
             this.lblTenNV.TabIndex = 2;
             this.lblTenNV.Text = "Tên Nhân Viên";
             this.lblTenNV.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblTenNV.Click += new System.EventHandler(this.lblTenNV_Click);
             // 
             // btnLogOut
             // 
@@ -132,7 +129,6 @@
             this.mainpanel.Name = "mainpanel";
             this.mainpanel.Size = new System.Drawing.Size(1618, 1080);
             this.mainpanel.TabIndex = 2;
-            this.mainpanel.Paint += new System.Windows.Forms.PaintEventHandler(this.mainpanel_Paint);
             // 
             // btnTrangChu
             // 
@@ -339,7 +335,6 @@
             this.btnNhap.TextColor = System.Drawing.Color.Black;
             this.btnNhap.UseVisualStyleBackColor = false;
             this.btnNhap.Click += new System.EventHandler(this.btnNhap_Click);
-            this.btnNhap.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnNhap_MouseClick);
             // 
             // btnXuat
             // 

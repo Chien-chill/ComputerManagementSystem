@@ -16,8 +16,8 @@ namespace DoAn
 {
     public partial class FormNhanVien : Form
     {
-        SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\PC\source\repos\QuanLyMayTinh\DoAn\DatabaseQuanLy.mdf;Integrated Security=True");
         bool CheckClickBtnSua = false;
+        Functions f = new Functions();
         public FormNhanVien()
         {
             InitializeComponent();
@@ -30,51 +30,31 @@ namespace DoAn
             btnXoaNV.Enabled = true;
             pnNV.Visible = false;
             dtgNV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            conn.Open();
-            string QuerrySelect = "select *  from dbo.NhanVien";
-            SqlCommand cmd = new SqlCommand(QuerrySelect, conn);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dtgNV.DataSource = dt;
-            conn.Close();
-            conn.Open();
-            string QuerrySelect1 = "select *  from dbo.TaiKhoan";
-            SqlCommand cmd1 = new SqlCommand(QuerrySelect1, conn);
-            SqlDataAdapter da1 = new SqlDataAdapter(cmd1);
-            DataTable dt1 = new DataTable();
-            da1.Fill(dt1);
-            dtgTK.DataSource = dt1;
-            conn.Close();
+            dtgNV.DataSource = f.ReadData("NhanVien", "1", "1");
+            dtgTK.DataSource = f.ReadData("TaiKhoan", "1", "1");
             btnInsert.Visible = true;
             btnSave.Visible = false;
             btnDelete.Visible = false;
         }
-
-       
         bool checkError = false;
-        public void ErrorWarning(ErrorProvider error, TextBox txt, string message)
-        {
-            error.SetError(txt, message);
-            txt.Focus();
-            checkError = true;
-            conn.Close();
-        }
         public void CheckInputTxt()
         {
             int songuyen = 0;
             DateTime date = new DateTime(2023, 11, 25);
             if (txtMaNV.Text == "")
             {
-                ErrorWarning(errorProvider1, txtMaNV, "Chưa nhập mã nhân viên");
+                f.ErrorWarning(errorProvider1, txtMaNV, "Chưa nhập mã nhân viên");
+                checkError = true;
             }
             else if (txtTenNV.Text == "")
             {
-                ErrorWarning(errorProvider1, txtTenNV, "Chưa nhập tên nhân viên");
+                f.ErrorWarning(errorProvider1, txtTenNV, "Chưa nhập tên nhân viên");
+                checkError = true;
             }
             else if (txtCCCD.Text == "")
             {
-                ErrorWarning(errorProvider1, txtCCCD, "Chưa nhập số căn cước");
+                f.ErrorWarning(errorProvider1, txtCCCD, "Chưa nhập số căn cước");
+                    checkError = true;
             }
             else if (radNam.Checked == false && radNu.Checked == false)
             {
@@ -93,15 +73,18 @@ namespace DoAn
             }
             else if (txtDiaChi.Text == "")
             {
-                ErrorWarning(errorProvider1, txtDiaChi, "Chưa nhập địa chỉ");
+                f.ErrorWarning(errorProvider1, txtDiaChi, "Chưa nhập địa chỉ");
+                checkError = true;
             }
             else if (txtDienThoai.Text == "")
             {
-                ErrorWarning(errorProvider1, txtDienThoai, "Chưa nhập số điện thoại");
+                f.ErrorWarning(errorProvider1, txtDienThoai, "Chưa nhập số điện thoại");
+                checkError = true;
             }
             else if (int.TryParse(txtDienThoai.Text, out songuyen) == false || int.Parse(txtDienThoai.Text) <= 0)
             {
-                ErrorWarning(errorProvider1, txtDienThoai, "Sai định dạng số điện thoại");
+                f.ErrorWarning(errorProvider1, txtDienThoai, "Sai định dạng số điện thoại");
+                checkError = true;
             }
             else if (txtChucVu.Text == "")
             {
@@ -110,15 +93,18 @@ namespace DoAn
             }
             else if (txtLuong.Text == "")
             {
-                ErrorWarning(errorProvider1, txtLuong, "Chưa nhập lương");
+                f.ErrorWarning(errorProvider1, txtLuong, "Chưa nhập lương");
+                checkError = true;
             }
             else if (int.TryParse(txtLuong.Text, out songuyen) == false || int.Parse(txtLuong.Text) <= 0)
             {
-                ErrorWarning(errorProvider1, txtLuong, "Sai định dạng lương");
+                f.ErrorWarning(errorProvider1, txtLuong, "Sai định dạng lương");
+                checkError = true;
             }
             else if (txtBank.Text == "")
             {
-                ErrorWarning(errorProvider1, txtBank, "Chưa nhập bảo hành");
+                f.ErrorWarning(errorProvider1, txtBank, "Chưa nhập bảo hành");
+                checkError = true;
             }
         }
         public void ResetTextBox()
@@ -140,60 +126,11 @@ namespace DoAn
        
         public void clear_whitespace()
         {
-            txtMaNV.Text = txtMaNV.Text.Trim();
-            txtTenNV.Text = txtTenNV.Text.Trim();
-            txtDiaChi.Text = txtDiaChi.Text.Trim();
-            txtDienThoai.Text = txtDienThoai.Text.Trim();
-            txtBank.Text = txtBank.Text.Trim();
-            txtGhiChu.Text = txtGhiChu.Text.Trim();
-            txtCCCD.Text = txtCCCD.Text.Trim();
-            txtLuong.Text = txtLuong.Text.Trim();
-            txtChucVu.Text = txtChucVu.Text.Trim();
-            Regex trimmer = new Regex(@"\s\s+"); // Xoá khoảng trắng thừa trong chuỗi 
-            txtMaNV.Text = trimmer.Replace(txtMaNV.Text, " ");
-            txtTenNV.Text = trimmer.Replace(txtTenNV.Text, " ");
-            txtDiaChi.Text = trimmer.Replace(txtDiaChi.Text, " ");
-            txtDienThoai.Text = trimmer.Replace(txtDienThoai.Text, " ");
-            txtBank.Text = trimmer.Replace(txtBank.Text, " ");
-            txtGhiChu.Text = trimmer.Replace(txtGhiChu.Text, " ");
-            txtCCCD.Text = trimmer.Replace(txtCCCD.Text, " ");
-            txtLuong.Text = trimmer.Replace(txtLuong.Text, " ");
-            txtChucVu.Text = trimmer.Replace(txtChucVu.Text, " ");
+            TextBox[] txt = { txtMaNV, txtTenNV, txtDiaChi, txtBank, txtGhiChu, txtCCCD, txtLuong};
+            f.clear_whitespace(txt);
         }
         int numrow;
         bool checkClickdtg = false;
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtMaNV_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtTenNV_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-        }
         int numrow1;
         public void ClearTextBox()
         {
@@ -223,110 +160,34 @@ namespace DoAn
             errorProvider1.Clear();
             if (txtTaiKhoan.Text == "")
             {
-                ErrorWarning(errorProvider1, txtTaiKhoan, "Chưa nhập mã nhân viên");
+                f.ErrorWarning(errorProvider1, txtTaiKhoan, "Chưa nhập mã nhân viên");
             }
             else if (txtMatKhau.Text == "")
             {
-                ErrorWarning(errorProvider1, txtMatKhau, "Chưa nhập mật khẩu");
+                f.ErrorWarning(errorProvider1, txtMatKhau, "Chưa nhập mật khẩu");
             }
             else
             {
-                conn.Open();
-                string QuerryCheckMa = "select MaNV from dbo.NhanVien where MaNV = '" + txtTaiKhoan.Text + "'";
-                SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                SqlDataReader dta = cmd.ExecuteReader();
-                if (!dta.Read())
+                if (!f.Select_TblCheck("MaNV", "NhanVien", "MaNV", txtTaiKhoan.Text))
                 {
-                    ErrorWarning(errorProvider1, txtTaiKhoan, "Mã nhân viên không tồn tại");
-                    conn.Close();
+                    f.ErrorWarning(errorProvider1, txtTaiKhoan, "Mã nhân viên không tồn tại");
                 }
                 else
                 {
-                    conn.Close();
-                    conn.Open();
-                    string QuerryCheckMa1 = "select MaNV from dbo.TaiKhoan where MaNV = '" + txtTaiKhoan.Text + "'";
-                    SqlCommand cmd1 = new SqlCommand(QuerryCheckMa1, conn);
-                    SqlDataReader dta1 = cmd1.ExecuteReader();
-                    if (dta1.Read())
+                    if (f.Select_TblCheck("MaNV","TaiKhoan","MaNV",txtTaiKhoan.Text))
                     {
-                        ErrorWarning(errorProvider1, txtTaiKhoan, "Tài khoản đã tồn tại");
-                        conn.Close();
+                        f.ErrorWarning(errorProvider1, txtTaiKhoan, "Tài khoản đã tồn tại");
                     }
                     else
                     {
-                        conn.Close();
-                        conn.Open();
-                        string QuerryInsert = "insert into dbo.TaiKhoan(MaNV,MatKhau) values ('" + txtTaiKhoan.Text + "','" + txtMatKhau.Text + "')";
-                        SqlCommand cmd2 = new SqlCommand(QuerryInsert, conn);
-                        cmd2.ExecuteNonQuery();
-                        conn.Close();
+                        SqlParameter[] parameter = new SqlParameter[]
+                        {
+                            new SqlParameter("@1",txtTaiKhoan.Text),
+                            new SqlParameter("@2",txtMatKhau.Text)
+                        };
+                        f.InsertDataIntoTable("TaiKhoan(MaNV,MatKhau)", parameter);
+                        dtgTK.DataSource = f.ReadData("TaiKhoan", "1", "1");
                         ClearTextBox();
-                        conn.Open();
-                        string QuerrySelect1 = "select *  from dbo.TaiKhoan";
-                        SqlCommand cmd3 = new SqlCommand(QuerrySelect1, conn);
-                        SqlDataAdapter da1 = new SqlDataAdapter(cmd3);
-                        DataTable dt1 = new DataTable();
-                        da1.Fill(dt1);
-                        dtgTK.DataSource = dt1;
-                        conn.Close();
-                    }    
-                }
-            }
-        }
-
-        private void btnSave_Click_1(object sender, EventArgs e)
-        {
-            errorProvider1.Clear();
-            if (txtTaiKhoan.Text == "")
-            {
-                ErrorWarning(errorProvider1, txtTaiKhoan, "Chưa nhập mã nhân viên");
-            }
-            else if (txtMatKhau.Text == "")
-            {
-                ErrorWarning(errorProvider1, txtMatKhau, "Chưa nhập mật khẩu");
-            }
-            else
-            {
-                conn.Open();
-                string QuerryCheckMa = "select MaNV from dbo.NhanVien where MaNV = '" + txtTaiKhoan.Text + "'";
-                SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                SqlDataReader dta = cmd.ExecuteReader();
-                if (!dta.Read())
-                {
-                    ErrorWarning(errorProvider1, txtTaiKhoan, "Mã nhân viên không tồn tại");
-                    conn.Close();
-                }
-                else
-                {
-                    conn.Close();
-                    conn.Open();
-                    string QuerryCheckMa1 = "select MaNV from dbo.TaiKhoan where MaNV = '" + txtTaiKhoan.Text + "'";
-                    SqlCommand cmd1 = new SqlCommand(QuerryCheckMa1, conn);
-                    SqlDataReader dta1 = cmd1.ExecuteReader();
-                    if (dta1.Read() && txtTaiKhoan.Text != dtgTK.Rows[numrow1].Cells[0].Value.ToString())
-                    {
-                        ErrorWarning(errorProvider1, txtTaiKhoan, "Tài khoản đã tồn tại");
-                        conn.Close();
-                    }
-                    else
-                    {
-                        conn.Close();
-                        conn.Open();
-                        string QuerryUpdate = "update dbo.TaiKhoan set MaNV = '" + txtTaiKhoan.Text + "',MatKhau = '" + txtMatKhau.Text + "' where " +
-                            "MaNV = '" + dtgTK.Rows[numrow1].Cells[0].Value.ToString() + "'";
-                        SqlCommand cmd2 = new SqlCommand(QuerryUpdate, conn);
-                        cmd2.ExecuteNonQuery();
-                        conn.Close();
-                        ClearTextBox();
-                        conn.Open();
-                        string QuerrySelect1 = "select *  from dbo.TaiKhoan";
-                        SqlCommand cmd3 = new SqlCommand(QuerrySelect1, conn);
-                        SqlDataAdapter da1 = new SqlDataAdapter(cmd3);
-                        DataTable dt1 = new DataTable();
-                        da1.Fill(dt1);
-                        dtgTK.DataSource = dt1;
-                        conn.Close();
-                        showbtn();
                     }
                 }
             }
@@ -334,22 +195,16 @@ namespace DoAn
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            string QuerryDelete = "delete from  dbo.TaiKhoan where MaNV = '" + dtgTK.Rows[numrow1].Cells[0].Value.ToString() + "'";
-            conn.Open();
-            SqlCommand cmd = new SqlCommand(QuerryDelete, conn);
-            cmd.ExecuteNonQuery();
-            conn.Close();
+            string[] field = { "MaNV" };
+            SqlParameter[] parameter = new SqlParameter[]
+            {
+                new SqlParameter("@1",dtgTK.Rows[numrow1].Cells[0].Value.ToString())
+            };
+            f.DeleteDataTable("TaiKhoan", field, parameter);
             dtgTK.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            conn.Open();
-            string QuerrySelect = "select *  from dbo.TaiKhoan";
-            SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
-            SqlDataAdapter da = new SqlDataAdapter(cmd1);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dtgTK.DataSource = dt;
-            conn.Close();
-             ClearTextBox();
-                showbtn();
+            dtgTK.DataSource = f.ReadData("TaiKhoan", "1", "1");
+            ClearTextBox();
+            showbtn();
         }
 
         private void btnThemNV_Click_1(object sender, EventArgs e)
@@ -361,12 +216,6 @@ namespace DoAn
             btnLuu.Visible = true;
             btnSuaNV.Enabled = false;
         }
-
-        private void dtgNV_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
         private void btnDong_Click_1(object sender, EventArgs e)
         {
             pnNV.Visible = false;
@@ -384,21 +233,16 @@ namespace DoAn
             CheckInputTxt();
             if (!checkError)
             {
-                conn.Open();
-                string QuerryCheckMa = "select MaNV from dbo.NhanVien where MaNV = '" + txtMaNV.Text + "'";
-                SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                SqlDataReader dta = cmd.ExecuteReader();
-                if (dta.Read() == true && txtMaNV.Text != dtgNV.Rows[numrow].Cells[0].Value.ToString())
+                
+                if (f.Select_TblCheck("MaNV","NhanVien","MaNV",txtMaNV.Text) && txtMaNV.Text != dtgNV.Rows[numrow].Cells[0].Value.ToString())
                 {
-                    ErrorWarning(errorProvider1, txtMaNV, "Mã nhân viên đã tồn tại");
-                    conn.Close();
+                    f.ErrorWarning(errorProvider1, txtMaNV, "Mã nhân viên đã tồn tại");
                 }
                 else
                 {
                     if (checkClickdtg)
                     {
                         checkClickdtg = false;
-                        conn.Close();
                         string GioiTinh = string.Empty;
                         if (radNam.Checked == true)
                         {
@@ -408,20 +252,28 @@ namespace DoAn
                         {
                             GioiTinh = "Nữ";
                         }
-                        conn.Open();
-                        string QuerryUpdate = " Update dbo.NhanVien set MaNV = '" + txtMaNV.Text + "',TenNV = N'" + txtTenNV.Text + "',CCCD ='" + txtCCCD.Text + "',GioiTinhNV =N'" + GioiTinh + "',NgaySinhNV ='" + dtpNgaySinh.Value.ToShortDateString() + "',DiaChiNV =N'" + txtDiaChi.Text + "',DienThoaiNV = N'" + txtDienThoai.Text + "'," +
-                            "Bank=N'" + txtBank.Text + "',GhiChu=N'" + txtGhiChu.Text + "',ChucVu=N'" + txtChucVu.Text + "',Luong =" + double.Parse(txtLuong.Text) + " where MaNV = N'" + dtgNV.Rows[numrow].Cells[0].Value.ToString() + "'";
-                        SqlCommand cmd1 = new SqlCommand(QuerryUpdate, conn);
-                        cmd1.ExecuteNonQuery();
-                        conn.Close();
-                        conn.Open();
-                        string QuerrySelect = "select *  from dbo.NhanVien";
-                        SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
-                        SqlDataAdapter da = new SqlDataAdapter(cmd2);
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-                        dtgNV.DataSource = dt;
-                        conn.Close();
+                        string[] field = { "MaNV", "TenNV", "CCCD", "GioiTinhNV", "NgaySinhNV", "Bank", "GhiChu", "ChucVu", "Luong" };
+                        SqlParameter[] parameter = new SqlParameter[]
+                        {
+                            new SqlParameter("@1",txtMaNV.Text),
+                            new SqlParameter("@2",txtTenNV.Text),
+                            new SqlParameter("@3",txtCCCD.Text),
+                            new SqlParameter("@4",GioiTinh),
+                            new SqlParameter("@5",dtpNgaySinh.Value.ToShortDateString()),
+                            new SqlParameter("@6",txtDiaChi.Text),
+                            new SqlParameter("@7",txtDienThoai.Text),
+                            new SqlParameter("@8",txtBank.Text),
+                            new SqlParameter("@9",txtGhiChu.Text),
+                            new SqlParameter("@10",txtChucVu.Text),
+                            new SqlParameter("@11",double.Parse(txtLuong.Text))
+                        };
+                        string[] fieldCondition = { "MaNV" };
+                        SqlParameter[] parameterCondition = new SqlParameter[]
+                        {
+                            new SqlParameter("@12",dtgNV.Rows[numrow].Cells[0].Value.ToString())
+                        };
+                        f.UpdateDataTable("NhanVien", field, parameter, fieldCondition, parameterCondition);
+                        dtgNV.DataSource = f.ReadData("NhanVien","1","1");
                     }
                     else
                     {
@@ -441,18 +293,12 @@ namespace DoAn
             CheckInputTxt();
             if (!checkError)
             {
-                conn.Open();
-                string QuerryCheckMa = "select MaNV from dbo.NhanVien where MaNV = '" + txtMaNV.Text + "'";
-                SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                SqlDataReader dta = cmd.ExecuteReader();
-                if (dta.Read() == true)
+                if (f.Select_TblCheck("MaNV", "NhanVien", "MaNV", txtMaNV.Text))
                 {
-                    ErrorWarning(errorProvider1, txtMaNV, "Mã nhân viên đã tồn tại");
-                    conn.Close();
+                    f.ErrorWarning(errorProvider1, txtMaNV, "Mã nhân viên đã tồn tại");
                 }
                 else
                 {
-                    conn.Close();
                     string GioiTinh = string.Empty;
                     if (radNam.Checked == true)
                     {
@@ -462,22 +308,23 @@ namespace DoAn
                     {
                         GioiTinh = "Nữ";
                     }
-                    conn.Open();
-                    string QuerryInsert = "insert into dbo.NhanVien(MaNV,TenNV,CCCD,NgaySinhNV,GioiTinhNV,DiaChiNV,DienThoaiNV,ChucVu,Luong,Bank,GhiChu)" +
-                        "values ('" + txtMaNV.Text + "',N'" + txtTenNV.Text + "',N'" + txtCCCD.Text + "','" + dtpNgaySinh.Value.ToShortDateString() + "',N'" + GioiTinh + "',N'" + txtDiaChi.Text + "','" +
-                        txtDienThoai.Text + "',N'" + txtChucVu.Text + "'," + double.Parse(txtLuong.Text) + ",N'" + txtBank.Text + "',N'" + txtGhiChu.Text + "')";
-                    SqlCommand cmd1 = new SqlCommand(QuerryInsert, conn);
-                    cmd1.ExecuteNonQuery();
-                    conn.Close();
+                    SqlParameter[] parameter = new SqlParameter[]
+                       {
+                            new SqlParameter("@1",txtMaNV.Text),
+                            new SqlParameter("@2",txtTenNV.Text),
+                            new SqlParameter("@3",txtCCCD.Text),
+                            new SqlParameter("@4",dtpNgaySinh.Value.ToShortDateString()),
+                            new SqlParameter("@5",GioiTinh),
+                            new SqlParameter("@6",txtDiaChi.Text),
+                            new SqlParameter("@7",txtDienThoai.Text),
+                            new SqlParameter("@8",txtBank.Text),
+                            new SqlParameter("@9",txtGhiChu.Text),
+                            new SqlParameter("@10",txtChucVu.Text),
+                            new SqlParameter("@11",double.Parse(txtLuong.Text))
+                       };
+                    f.InsertDataIntoTable("NhanVien(MaNV,TenNV,CCCD,NgaySinhNV,GioiTinhNV,DiaChiNV,DienThoaiNV,ChucVu,Luong,Bank,GhiChu)",parameter);
                     ResetTextBox();
-                    conn.Open();
-                    string QuerrySelect = "select *  from dbo.NhanVien";
-                    SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
-                    SqlDataAdapter da = new SqlDataAdapter(cmd2);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dtgNV.DataSource = dt;
-                    conn.Close();
+                    dtgNV.DataSource = f.ReadData("NhanVien", "1", "1");
                 }
             }
         }
@@ -496,20 +343,14 @@ namespace DoAn
         {
             if (checkClickdtg)
             {
-                string QuerryDelete = "delete from  dbo.NhanVien where MaNV = '" + dtgNV.Rows[numrow].Cells[0].Value.ToString() + "'";
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(QuerryDelete, conn);
-                cmd.ExecuteNonQuery();
-                conn.Close();
+                string[] fieldCondition = { "MaNV" };
+                SqlParameter[] parameterCondition = new SqlParameter[]
+                {
+                    new SqlParameter("@1", dtgNV.Rows[numrow].Cells[0].Value.ToString())
+                };
+                f.DeleteDataTable("NhanVien", fieldCondition, parameterCondition);
                 dtgNV.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                conn.Open();
-                string QuerrySelect = "select *  from dbo.NhanVien";
-                SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
-                SqlDataAdapter da = new SqlDataAdapter(cmd1);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                dtgNV.DataSource = dt;
-                conn.Close();
+                dtgNV.DataSource = f.ReadData("NhanVien", "1", "1");
             }
             else
             {
@@ -570,6 +411,53 @@ namespace DoAn
                     row++;
                 }
                 BangLuong.SaveAndOpenFile("BangLuong.doc");
+            }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            errorProvider1.Clear();
+            if (txtTaiKhoan.Text == "")
+            {
+                f.ErrorWarning(errorProvider1, txtTaiKhoan, "Chưa nhập mã nhân viên");
+            }
+            else if (txtMatKhau.Text == "")
+            {
+                f.ErrorWarning(errorProvider1, txtMatKhau, "Chưa nhập mật khẩu");
+            }
+            else
+            {
+
+                if (!f.Select_TblCheck("MaNV", "NhanVien", "MaNV", txtTaiKhoan.Text))
+                {
+                    f.ErrorWarning(errorProvider1, txtTaiKhoan, "Mã nhân viên không tồn tại");
+                }
+                else
+                {
+
+                    if (f.Select_TblCheck("MaNV", "TaiKhoan", "MaNV", txtTaiKhoan.Text) && txtTaiKhoan.Text != dtgTK.Rows[numrow1].Cells[0].Value.ToString())
+                    {
+                        f.ErrorWarning(errorProvider1, txtTaiKhoan, "Tài khoản đã tồn tại");
+                    }
+                    else
+                    {
+                        string[] field = { "MaNV", "MatKhau" };
+                        SqlParameter[] parameter = new SqlParameter[]
+                        {
+                            new SqlParameter("@1",txtTaiKhoan.Text),
+                            new SqlParameter("@2",txtMatKhau.Text)
+                        };
+                        string[] fieldCondition = { "MaNV" };
+                        SqlParameter[] parameterCondition = new SqlParameter[]
+                        {
+                            new SqlParameter("@3", dtgTK.Rows[numrow1].Cells[0].Value.ToString())
+                        };
+                        f.UpdateDataTable("TaiKhoan", field, parameter, fieldCondition, parameterCondition);
+                        dtgTK.DataSource = f.ReadData("TaiKhoan", "1", "1");
+                        ClearTextBox();
+                        showbtn();
+                    }
+                }
             }
         }
     }

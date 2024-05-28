@@ -113,7 +113,6 @@
             this.txtWebsite.Name = "txtWebsite";
             this.txtWebsite.Size = new System.Drawing.Size(276, 26);
             this.txtWebsite.TabIndex = 6;
-            this.txtWebsite.TextChanged += new System.EventHandler(this.txtWebsite_TextChanged);
             // 
             // txtEmail
             // 
@@ -489,7 +488,6 @@
             this.dtgNCC.Size = new System.Drawing.Size(1181, 809);
             this.dtgNCC.TabIndex = 24;
             this.dtgNCC.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgNCC_CellClick);
-            this.dtgNCC.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgNCC_CellContentClick);
             // 
             // Column2
             // 

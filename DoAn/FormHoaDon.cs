@@ -18,14 +18,13 @@ namespace DoAn
 {
     public partial class FormHoaDon : Form
     {
-        SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\PC\source\repos\QuanLyMayTinh\DoAn\DatabaseQuanLy.mdf;Integrated Security=True");
         HoaDon hoaDon;
         bool CheckClickBtnSua = false;
+        Functions f = new Functions();  
         public FormHoaDon()
         {
             InitializeComponent();
         }
-
         private void btnThemHD_Click(object sender, EventArgs e)
         {
             CheckClickBtnSua = false;
@@ -44,13 +43,7 @@ namespace DoAn
                 txtMaKH.Enabled = false;
             }
             lblDateHD.Text = DateTime.Now.ToShortDateString();
-            conn.Open();
-            string QuerrySelectMaNV = "select MaNV from dbo.BoNhoTam ";
-            SqlCommand cmd2 = new SqlCommand(QuerrySelectMaNV, conn);
-            object GetMaNV = cmd2.ExecuteScalar();
-            conn.Close();
-            string MaNV = Convert.ToString(GetMaNV);
-            txtMaNV.Text = MaNV;
+            txtMaNV.Text = f.SelectTemp();
         }
 
         private void FormHoaDon_Load(object sender, EventArgs e)
@@ -66,23 +59,10 @@ namespace DoAn
         }
         public void clear_whitespace()
         {
-            txtMaHD.Text = txtMaHD.Text.Trim();
-            txtMaKH.Text = txtMaKH.Text.Trim();
-            txtMaMT.Text = txtMaMT.Text.Trim();
-            txtSoLuong.Text = txtSoLuong.Text.Trim();
-            txtMaNV.Text = txtMaNV.Text.Trim();
-            Regex trimmer = new Regex(@"\s\s+"); // Xoá khoảng trắng thừa trong chuỗi 
-            txtMaHD.Text = trimmer.Replace(txtMaHD.Text, " ");
-            txtMaKH.Text = trimmer.Replace(txtMaKH.Text, " ");
-            txtMaMT.Text = trimmer.Replace(txtMaMT.Text, " ");
-            txtSoLuong.Text = trimmer.Replace(txtSoLuong.Text, " ");
-            txtMaNV.Text = trimmer.Replace(txtMaNV.Text, " ");
+            TextBox[] txt = {txtMaHD,txtMaKH,txtMaMT,txtSoLuong,txtMaNV};
+            f.clear_whitespace(txt);
         }
-        public void ErrorWarning(ErrorProvider error, TextBox txt, string message)
-        {
-            error.SetError(txt, message);
-            txt.Focus();
-        }
+        
         bool check = false;
 
         private void btnLuu_Click(object sender, EventArgs e)
@@ -90,48 +70,36 @@ namespace DoAn
             int songuyen = 0;
             errorProvider1.Clear();
             clear_whitespace();
-            conn.Open();
-            string QuerryCheckMa = "select MaHD from dbo.HoaDon where MaHD = '" + txtMaHD.Text + "'";
-            SqlCommand cmd1 = new SqlCommand(QuerryCheckMa, conn);
-            SqlDataReader dta = cmd1.ExecuteReader();
-            if (dta.Read() == true && check == false)
+            if (f.Select_TblCheck("MaHD","HoaDon","MaHD",txtMaHD.Text) && check == false)
             {
-                ErrorWarning(errorProvider1, txtMaHD, "Mã hoá đơn đã tồn tại");
-                conn.Close();
+                f.ErrorWarning(errorProvider1, txtMaHD, "Mã hoá đơn đã tồn tại");
             }
             else if (txtMaHD.Text == "")
             {
-                ErrorWarning(errorProvider1, txtMaHD, "Chưa nhập mã hoá đơn");
-                conn.Close();
+                f.ErrorWarning(errorProvider1, txtMaHD, "Chưa nhập mã hoá đơn");
             }
             else if (txtMaKH.Text == "")
             {
-                ErrorWarning(errorProvider1, txtMaKH, "Chưa nhập mã khách hàng");
-                conn.Close();
+                f.ErrorWarning(errorProvider1, txtMaKH, "Chưa nhập mã khách hàng");
             }
             else if (txtMaMT.Text == "")
             {
-                ErrorWarning(errorProvider1, txtMaMT, "Chưa nhập mã máy tính");
-                conn.Close();
+                f.ErrorWarning(errorProvider1, txtMaMT, "Chưa nhập mã máy tính");
             }
             else if (txtSoLuong.Text == "")
             {
-                ErrorWarning(errorProvider1, txtSoLuong, "Chưa nhập số lượng");
-                conn.Close();
+                f.ErrorWarning(errorProvider1, txtSoLuong, "Chưa nhập số lượng");
             }
             else if (int.TryParse(txtSoLuong.Text, out songuyen) == false || int.Parse(txtSoLuong.Text) <= 0)
             {
-                ErrorWarning(errorProvider1, txtSoLuong, "Sai định dạng số lượng");
-                conn.Close();
+                f.ErrorWarning(errorProvider1, txtSoLuong, "Sai định dạng số lượng");
             }
             else if (txtMaNV.Text == "")
             {
-                ErrorWarning(errorProvider1, txtMaNV, "Chưa nhập mã nhân viên");
-                conn.Close();
+                f.ErrorWarning(errorProvider1, txtMaNV, "Chưa nhập mã nhân viên");
             }
             else
             {
-                conn.Close();
                 check = true;
                 hoaDon = new HoaDon()
                 {
@@ -145,65 +113,46 @@ namespace DoAn
                     GhiChu = txtGhiChu.Text
                 };
                 dtgHD.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                conn.Open();
-                SqlCommand cmd3 = new SqlCommand("select MaKH from dbo.KhachHang where MaKH = '" + hoaDon.MaKH + "'", conn);
-                SqlDataReader dta1 = cmd3.ExecuteReader();
-                if (!dta1.Read())
+               
+                if (!f.Select_TblCheck("MaKH","KhachHang","MaKH", hoaDon.MaKH))
                 {
-                    ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng không tồn tại");
-                    conn.Close();
+                    f.ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng không tồn tại");
                 }
                 else
                 {
-                    conn.Close();
-                    conn.Open();
-                    string QuerrySelectMaKH = "select TenKH from dbo.KhachHang where MaKH = '" + hoaDon.MaKH + "'";
-                    SqlCommand cmd2 = new SqlCommand(QuerrySelectMaKH, conn);
-                    object GetTenKH = cmd2.ExecuteScalar();
-                    conn.Close();
-                    conn.Open();
-                    SqlCommand cmd4 = new SqlCommand("select MaMT from dbo.Kho where MaMT ='" + hoaDon.MaMT + "'", conn);
-                    SqlDataReader dta2 = cmd4.ExecuteReader();
-                    if (!dta2.Read())
+                    if (!f.Select_TblCheck("MaMT","Kho","MaMT", hoaDon.MaMT))
                     {
-                        ErrorWarning(errorProvider1, txtMaMT, "Mã máy tính không còn trong kho");
-                        conn.Close();
+                        f.ErrorWarning(errorProvider1, txtMaMT, "Mã máy tính không còn trong kho");
                     }
                     else
                     {
-                        conn.Close();
-                        conn.Open();
-                        string QuerrySelectDonGia = "select DonGiaBan from dbo.Kho where MaMT = '" + hoaDon.MaMT + "'";
-                        SqlCommand cmd5 = new SqlCommand(QuerrySelectDonGia, conn);
-                        object GetDonGia = cmd5.ExecuteScalar();
-                        string QuerrySelectTenMT = "select TenMT from dbo.MayTinh where MaMT = '" + hoaDon.MaMT + "'";
-                        SqlCommand cmd6 = new SqlCommand(QuerrySelectTenMT, conn);
-                        object GetTenMT = cmd6.ExecuteScalar();
-                        conn.Close();
-                        hoaDon.TenMT = Convert.ToString(GetTenMT);
-                        hoaDon.TenKH = Convert.ToString(GetTenKH);
-                        hoaDon.DonGia = Convert.ToDouble(GetDonGia);
+                        hoaDon.TenMT = Convert.ToString(f.Select_GetValue("TenMT","MayTinh","MaMT",hoaDon.MaMT));
+                        hoaDon.TenKH = Convert.ToString(f.Select_GetValue("TenKH", "KhachHang", "MaKH", hoaDon.MaKH));
+                        hoaDon.DonGia = Convert.ToDouble(f.Select_GetValue("DonGiaBan", "Kho", "MaMT", hoaDon.MaMT));
                         hoaDon.ThanhTien = hoaDon.DonGia * hoaDon.SoLuong;
-                        conn.Open();
-                        string QuerryInsert = "insert into dbo.HoaDon(MaHD,NgayBan,MaKH,TenKH,GiamGia,MaMT,TenMT,SoLuongMua,DonGia,ThanhTien,MaNV,GhiChu)" +
-                            "values ('" + hoaDon.MaHoaDon + "','" + hoaDon.NgayBan + "','" + hoaDon.MaKH + "',N'" + hoaDon.TenKH + "'," + hoaDon.GiamGia + ",'" + hoaDon.MaMT + "',N'" + hoaDon.TenMT + "'," +
-                            "" + hoaDon.SoLuong + "," + hoaDon.DonGia + "," + hoaDon.ThanhTien + ",'" + hoaDon.MaNV + "',N'" + hoaDon.GhiChu + "')";
-                        SqlCommand cmd = new SqlCommand(QuerryInsert, conn);
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
+                        SqlParameter[] parameter = new SqlParameter[]
+                        {
+                            new SqlParameter("@1",hoaDon.MaHoaDon),
+                            new SqlParameter("@2",hoaDon.NgayBan ),
+                            new SqlParameter("@3",hoaDon.MaKH ),
+                            new SqlParameter("@4",hoaDon.TenKH ),
+                            new SqlParameter("@5",hoaDon.GiamGia),
+                            new SqlParameter("@6",hoaDon.MaMT),
+                            new SqlParameter("@7",hoaDon.TenMT),
+                            new SqlParameter("@8",hoaDon.SoLuong),
+                            new SqlParameter("@9",hoaDon.DonGia),
+                            new SqlParameter("@10",hoaDon.ThanhTien),
+                            new SqlParameter("@11",hoaDon.MaNV ),
+                            new SqlParameter("@12",hoaDon.GhiChu )
+                        };
+
+                        f.InsertDataIntoTable("HoaDon(MaHD, NgayBan, MaKH, TenKH, GiamGia, MaMT, TenMT, SoLuongMua, DonGia, ThanhTien, MaNV, GhiChu)", parameter);
                         txtMaHD.Enabled = false;
                         txtMaKH.Enabled = false;
                         txtMaMT.Text = "";
                         txtSoLuong.Text = "";
                         txtGhiChu.Text = "";
-                        conn.Open();
-                        string QuerrySelect = "select *  from dbo.HoaDon where MaHD = '" + txtMaHD.Text + "'";
-                        SqlCommand cmd7 = new SqlCommand(QuerrySelect, conn);
-                        SqlDataAdapter da = new SqlDataAdapter(cmd7);
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-                        dtgHD.DataSource = dt;
-                        conn.Close();
+                        dtgHD.DataSource = f.ReadData("HoaDon", "MaHD", txtMaHD.Text);
                     }
                 }
             }
@@ -218,13 +167,7 @@ namespace DoAn
             btnSua.Visible = true;
             btnLuu.Visible = false;
             dtpHD.Enabled = false;
-            conn.Open();
-            string QuerrySelectMaNV = "select MaNV from dbo.BoNhoTam ";
-            SqlCommand cmd2 = new SqlCommand(QuerrySelectMaNV, conn);
-            object GetMaNV = cmd2.ExecuteScalar();
-            conn.Close();
-            string MaNV = Convert.ToString(GetMaNV);
-            txtMaNV.Text = MaNV;
+            txtMaNV.Text = f.SelectTemp();
         }
 
         private void btnDong_Click(object sender, EventArgs e)
@@ -264,96 +207,85 @@ namespace DoAn
             clear_whitespace();
             if (txtMaKH.Text == "")
             {
-                ErrorWarning(errorProvider1, txtMaKH, "Chưa nhập mã khách hàng");
+                f.ErrorWarning(errorProvider1, txtMaKH, "Chưa nhập mã khách hàng");
             }
             else if (txtMaMT.Text == "")
             {
-                ErrorWarning(errorProvider1, txtMaMT, "Chưa nhập mã máy tính");
+                f.ErrorWarning(errorProvider1, txtMaMT, "Chưa nhập mã máy tính");
             }
             else if (txtSoLuong.Text == "")
             {
-                ErrorWarning(errorProvider1, txtSoLuong, "Chưa nhập số lượng");
+                f.ErrorWarning(errorProvider1, txtSoLuong, "Chưa nhập số lượng");
             }
             else if (int.TryParse(txtSoLuong.Text, out songuyen) == false || int.Parse(txtSoLuong.Text) <= 0)
             {
-                ErrorWarning(errorProvider1, txtSoLuong, "Sai định dạng số lượng");
+                f.ErrorWarning(errorProvider1, txtSoLuong, "Sai định dạng số lượng");
             }
             else if (txtMaNV.Text == "")
             {
-                ErrorWarning(errorProvider1, txtMaNV, "Chưa nhập mã nhân viên");
+                f.ErrorWarning(errorProvider1, txtMaNV, "Chưa nhập mã nhân viên");
             }
             else
             {
                 if (checkClickdtg)
                 {
                     checkClickdtg = false;
-                    conn.Open();
-                    SqlCommand cmd3 = new SqlCommand("select MaKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'", conn);
-                    SqlDataReader dta1 = cmd3.ExecuteReader();
-                    if (!dta1.Read())
+                    if (!f.Select_TblCheck("MaKH","KhachHang","MaKH", txtMaKH.Text))
                     {
-                        ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng không tồn tại");
-                        conn.Close();
+                            f.ErrorWarning(errorProvider1, txtMaKH, "Mã khách hàng không tồn tại");
                     }
                     else
                     {
-                        conn.Close();
-                        conn.Open();
-                        string QuerrySelectTenKH = "select TenKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'";
-                        SqlCommand cmd2 = new SqlCommand(QuerrySelectTenKH, conn);
-                        object GetTenKH = cmd2.ExecuteScalar();
-                        conn.Close();
-                        conn.Open();
-                        SqlCommand cmd4 = new SqlCommand("select MaMT from dbo.Kho where MaMT ='" + txtMaMT.Text + "'", conn);
-                        SqlDataReader dta2 = cmd4.ExecuteReader();
-                        if (!dta2.Read())
+                        if (!f.Select_TblCheck("MaMT","Kho","MaMT", txtMaMT.Text))
                         {
-                            ErrorWarning(errorProvider1, txtMaMT, "Mã máy tính không còn trong kho");
-                            conn.Close();
+                            f. ErrorWarning(errorProvider1, txtMaMT, "Mã máy tính không còn trong kho");
                         }
                         else
                         {
-                            conn.Close();
-                            conn.Open();
-                            string QuerrySelectDonGia = "select DonGiaBan from dbo.Kho where MaMT = '" + txtMaMT.Text + "'";
-                            SqlCommand cmd5 = new SqlCommand(QuerrySelectDonGia, conn);
-                            object GetDonGia = cmd5.ExecuteScalar();
-                            string QuerrySelectTenMT = "select TenMT from dbo.MayTinh where MaMT = '" + txtMaMT.Text + "'";
-                            SqlCommand cmd6 = new SqlCommand(QuerrySelectTenMT, conn);
-                            object GetTenMT = cmd6.ExecuteScalar();
-                            conn.Close();
-                            string TenMT = Convert.ToString(GetTenMT);
-                            string TenKH = Convert.ToString(GetTenKH);
-                            double DonGia = Convert.ToDouble(GetDonGia);
+                            string TenMT = Convert.ToString(f.Select_GetValue("TenMT","MayTinh","MaMT",txtMaMT.Text));
+                            string TenKH = Convert.ToString(f.Select_GetValue("TenKH","KhachHang","MaKH",txtMaKH.Text));
+                            double DonGia = Convert.ToDouble(f.Select_GetValue("DonGiaBan","Kho","MaMT", txtMaMT.Text));
                             double ThanhTien = DonGia * int.Parse(txtSoLuong.Text);
                             int GiamGia = int.Parse(txtDiemTT.Text)/10;
-                            string QuerryUpdate = " Update dbo.HoaDon set TenMT = N'" + TenMT + "',DonGia = " + DonGia + ",ThanhTien = " + ThanhTien +
-                        ",MaMT = '" + txtMaMT.Text + "',SoLuongMua = " + int.Parse(txtSoLuong.Text) + ", MaNV = '"
-                         + txtMaNV.Text + "', GhiChu = N'" + txtGhiChu.Text + "' where MaHD = '" + txtMaHD.Text + "' and MaKH = '" + dtgHD.Rows[numrow].Cells[1].Value.ToString() +
-                         "' and GiamGia = '" + dtgHD.Rows[numrow].Cells[7].Value.ToString() + "' and MaMT = '" + dtgHD.Rows[numrow].Cells[3].Value.ToString() + "' and SoLuongMua = '" + dtgHD.Rows[numrow].Cells[5].Value.ToString() + "' and MaNV = '"
-                         + dtgHD.Rows[numrow].Cells[9].Value.ToString() + "' and GhiChu = '" + dtgHD.Rows[numrow].Cells[11].Value.ToString() + "';";
-                            string QuerryUpdateKH = "Update dbo.HoaDon set MaKH = '" + txtMaKH.Text + "', TenKH =N'" + TenKH + "' where MaHD = '" + txtMaHD.Text + "'";
-                            conn.Open();
-                            SqlCommand cmd = new SqlCommand(QuerryUpdate, conn);
-                            cmd.ExecuteNonQuery();
-                            conn.Close();
-                            string QuerryUpdateGG = "Update dbo.HoaDon set GiamGia = " + GiamGia + "where MaHD = '" + txtMaHD.Text + "'";
-                            conn.Open();
-                            SqlCommand cmd0 = new SqlCommand(QuerryUpdateGG, conn);
-                            cmd0.ExecuteNonQuery();
-                            conn.Close();
-                            conn.Open();
-                            SqlCommand cmd7 = new SqlCommand(QuerryUpdateKH, conn);
-                            cmd7.ExecuteNonQuery();
-                            conn.Close();
-                            string QuerrySelect = "select *  from dbo.HoaDon where MaHD = '" + txtMaHD.Text + "'";
-                            conn.Open();
-                            SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
-                            SqlDataAdapter da = new SqlDataAdapter(cmd1);
-                            DataTable dt = new DataTable();
-                            da.Fill(dt);
-                            dtgHD.DataSource = dt;
-                            conn.Close();
+
+                            string[] field1 = { "TenMT", "DonGia", "ThanhTien", "MaMT", "SoLuongMua", "MaNV", "GhiChu" };
+                            SqlParameter[] parameter1 = new SqlParameter[]
+                            {
+                                new SqlParameter("@1",TenMT),
+                                new SqlParameter("@2",DonGia),
+                                new SqlParameter("@3",ThanhTien),
+                                new SqlParameter("@4",txtMaMT.Text),
+                                new SqlParameter("@5",int.Parse(txtSoLuong.Text)),
+                                new SqlParameter("@6",txtMaNV.Text),
+                                new SqlParameter("@7",txtGhiChu.Text)
+
+                            };
+                            string[] fieldCondition1 = { "MaHD", "MaKH", "GiamGia", "MaMT", "SoLuongMua", "MaNV", "GhiChu" };
+                            SqlParameter[] parameterCondition1 = new SqlParameter[]
+                            {
+                                new SqlParameter ("@8",txtMaHD.Text),
+                                new SqlParameter ("@9",dtgHD.Rows[numrow].Cells[1].Value.ToString()),
+                                new SqlParameter ("@10",dtgHD.Rows[numrow].Cells[7].Value.ToString()),
+                                new SqlParameter ("@11", dtgHD.Rows[numrow].Cells[3].Value.ToString()),
+                                new SqlParameter ("@12",dtgHD.Rows[numrow].Cells[5].Value.ToString()),
+                                new SqlParameter ("@13",dtgHD.Rows[numrow].Cells[9].Value.ToString()),
+                                new SqlParameter ("@14",dtgHD.Rows[numrow].Cells[11].Value.ToString())
+                            };
+                            f.UpdateDataTable("HoaDon", field1, parameter1, fieldCondition1, parameterCondition1);
+                            string[] field2 = { "MaKH", "TenKH", "GiamGia" };
+                            SqlParameter[] parameter2 = new SqlParameter[]
+                            {
+                                new SqlParameter("@15",txtMaKH.Text),
+                                new SqlParameter("@16",TenKH),
+                                new SqlParameter("@17",GiamGia)
+                            };
+                            string[] fieldCondition2 = { "MaHD" };
+                            SqlParameter[] parameterCondition2 = new SqlParameter[]
+                            {
+                                new SqlParameter("@18",txtMaHD.Text)
+                            };
+                            f.UpdateDataTable("HoaDon", field2, parameter2, fieldCondition2, parameterCondition2);
+                            dtgHD.DataSource = f.ReadData("HoaDon", "MaHD", txtMaHD.Text);
                             txtMaKH.Enabled = false;
                         }
                     }
@@ -369,23 +301,20 @@ namespace DoAn
         {
             if (checkClickdtg)
             {
-
                 checkClickdtg = false;
-                string QuerryDelete = "delete from dbo.HoaDon where MaHD = '" + txtMaHD.Text + "' and MaKH = '" + dtgHD.Rows[numrow].Cells[1].Value.ToString() +
-                     "' and GiamGia = '" + dtgHD.Rows[numrow].Cells[7].Value.ToString() + "' and MaMT = '" + dtgHD.Rows[numrow].Cells[3].Value.ToString() + "' and SoLuongMua = '" + dtgHD.Rows[numrow].Cells[5].Value.ToString() + "' and MaNV = '"
-                     + dtgHD.Rows[numrow].Cells[9].Value.ToString() + "' and GhiChu = '" + dtgHD.Rows[numrow].Cells[11].Value.ToString() + "';";
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(QuerryDelete, conn);
-                cmd.ExecuteNonQuery();
-                conn.Close();
-                string QuerrySelect = "select *  from dbo.HoaDon where MaHD = '" + txtMaHD.Text + "'";
-                conn.Open();
-                SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
-                SqlDataAdapter da = new SqlDataAdapter(cmd1);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                dtgHD.DataSource = dt;
-                conn.Close();
+                string[] fieldCondition = { "MaHD", "MaKH", "GiamGia", "MaMT", "SoLuongMua", "MaNV", "GhiChu" };
+                SqlParameter[] parameterCondition = new SqlParameter[]
+                {
+                    new SqlParameter("@1",txtMaHD.Text),
+                    new SqlParameter("@2",dtgHD.Rows[numrow].Cells[1].Value.ToString()),
+                    new SqlParameter("@3",dtgHD.Rows[numrow].Cells[7].Value.ToString()),
+                    new SqlParameter("@4",dtgHD.Rows[numrow].Cells[3].Value.ToString()),
+                    new SqlParameter("@5",dtgHD.Rows[numrow].Cells[5].Value.ToString()),
+                    new SqlParameter("@6",dtgHD.Rows[numrow].Cells[9].Value.ToString()),
+                    new SqlParameter("@7",dtgHD.Rows[numrow].Cells[11].Value.ToString())
+                };
+                f.DeleteDataTable("HoaDon", fieldCondition, parameterCondition);
+                dtgHD.DataSource = f.ReadData("HoaDon", "MaHD", txtMaHD.Text);
             }
             else
             {
@@ -401,45 +330,13 @@ namespace DoAn
                 double TongSoTien = 0;
                 var Today = DateTime.Now;
                 Document HoaDon = new Document(@"TemplateWord\\Mau_Hoa_Don.doc");
-                conn.Open();
-                SqlCommand cmd1 = new SqlCommand("select NgaySinhKH from dbo.KhachHang where MaKH = '" + dtgHD.Rows[0].Cells[1].Value.ToString() + "'", conn);
-                object GetNgaySinh = cmd1.ExecuteScalar();
-                string NgaySinh = Convert.ToString(GetNgaySinh);
-                conn.Close();
-                conn.Open();
-                SqlCommand cmd2 = new SqlCommand("select GioiTinhKH from dbo.KhachHang where MaKH = '" + dtgHD.Rows[0].Cells[1].Value.ToString() + "'", conn);
-                object GetGioiTinh = cmd2.ExecuteScalar();
-                string GioiTinh = Convert.ToString(GetGioiTinh);
-                conn.Close();
-                conn.Open();
-                string QuerrySelectDiaChi = "select DiaChiKH from dbo.KhachHang where MaKH = '" + dtgHD.Rows[0].Cells[1].Value.ToString() + "'";
-                SqlCommand cmd3 = new SqlCommand(QuerrySelectDiaChi, conn);
-                object GetDiaChi = cmd3.ExecuteScalar();
-                string DiaChi = Convert.ToString(GetDiaChi);
-                conn.Close();
-                conn.Open();
-                string QuerrySelectDienThoai = "select DienThoaiKH from dbo.KhachHang where MaKH = '" + dtgHD.Rows[0].Cells[1].Value.ToString() + "'";
-                SqlCommand cmd4 = new SqlCommand(QuerrySelectDienThoai, conn);
-                object GetDienThoai = cmd4.ExecuteScalar();
-                string DienThoai = Convert.ToString(GetDienThoai);
-                conn.Close();
-                conn.Open();
-                string QuerrySelectBank = "select BANK from dbo.KhachHang where MaKH = '" + dtgHD.Rows[0].Cells[1].Value.ToString() + "'";
-                SqlCommand cmd5 = new SqlCommand(QuerrySelectBank, conn);
-                object GetBank = cmd5.ExecuteScalar();
-                string Bank = Convert.ToString(GetBank);
-                conn.Close();
-                conn.Open();
-                string QuerrySelectTenNV = "select TenNV from dbo.NhanVien where MaNV = '" + dtgHD.Rows[0].Cells[9].Value.ToString() + "'";
-                SqlCommand cmd6 = new SqlCommand(QuerrySelectTenNV, conn);
-                object GetTenNV = cmd6.ExecuteScalar();
-                string TenNV = Convert.ToString(GetTenNV);
-                conn.Close();
-                conn.Open();
-                SqlCommand cmd15 = new SqlCommand("select DiemThanThiet from dbo.KhachHang where MaKH = '" + dtgHD.Rows[0].Cells[1].Value.ToString() + "'", conn);
-                object GetDiemThanThiet = cmd15.ExecuteScalar();
-                double DiemThanThiet = Convert.ToDouble(GetDiemThanThiet);
-                conn.Close();
+                string NgaySinh = Convert.ToString(f.Select_GetValue("NgaySinhKH","KhachHang","MaKH", dtgHD.Rows[0].Cells[1].Value.ToString()));
+                string GioiTinh = Convert.ToString(f.Select_GetValue("GioiTinhKH","KhachHang","MaKH", dtgHD.Rows[0].Cells[1].Value.ToString()));
+                string DiaChi = Convert.ToString(f.Select_GetValue("DiaChiKH", "KhachHang", "MaKH", dtgHD.Rows[0].Cells[1].Value.ToString()));
+                string DienThoai = Convert.ToString(f.Select_GetValue("DienThoaiKH", "KhachHang", "MaKH", dtgHD.Rows[0].Cells[1].Value.ToString()));
+                string Bank = Convert.ToString(f.Select_GetValue("BANK", "KhachHang", "MaKH", dtgHD.Rows[0].Cells[1].Value.ToString()));
+                string TenNV = Convert.ToString(f.Select_GetValue("TenNV","NhanVien","MaNV", dtgHD.Rows[0].Cells[9].Value.ToString()));
+                double DiemThanThiet = Convert.ToDouble(f.Select_GetValue("DiemThanThiet","KhachHang","MaKH", dtgHD.Rows[0].Cells[1].Value.ToString()));
                 HoaDon.MailMerge.Execute(new[] { "Ngay_Thang_Nam" }, new[] { string.Format("Nam Định , ngày {0} tháng {1} năm {2}", Today.Day, Today.Month, Today.Year) });
                 HoaDon.MailMerge.Execute(new[] { "Ma_HD" }, new[] { dtgHD.Rows[0].Cells[0].Value.ToString() });
                 HoaDon.MailMerge.Execute(new[] { "Ma_KH" }, new[] { dtgHD.Rows[0].Cells[1].Value.ToString() });
@@ -459,46 +356,14 @@ namespace DoAn
                 ThongTin.InsertRows(row, row, count - 1);
                 for (int i = 0; i < count; i++)
                 {
-                    conn.Open();
-                    SqlCommand cmd7 = new SqlCommand("select LoaiHang from dbo.MayTinh where MaMT = '" + dtgHD.Rows[i].Cells[3].Value.ToString() + "'", conn);
-                    object GetLoaiHang = cmd7.ExecuteScalar();
-                    string LoaiHang = Convert.ToString(GetLoaiHang);
-                    conn.Close();
-                    conn.Open();
-                    SqlCommand cmd8 = new SqlCommand("select BaoHanh from dbo.MayTinh where MaMT = '" + dtgHD.Rows[i].Cells[3].Value.ToString() + "'", conn);
-                    object GetBaoHanh = cmd8.ExecuteScalar();
-                    string BaoHanh = Convert.ToString(GetBaoHanh);
-                    conn.Close();
-                    conn.Open();
-                    SqlCommand cmd9 = new SqlCommand("select CPU from dbo.MayTinh where MaMT = '" + dtgHD.Rows[i].Cells[3].Value.ToString() + "'", conn);
-                    object GetCPU = cmd9.ExecuteScalar();
-                    string CPU = Convert.ToString(GetCPU);
-                    conn.Close();
-                    conn.Open();
-                    SqlCommand cmd10 = new SqlCommand("select RAM1 from dbo.MayTinh where MaMT = '" + dtgHD.Rows[i].Cells[3].Value.ToString() + "'", conn);
-                    object GetRAM1 = cmd10.ExecuteScalar();
-                    string RAM1 = Convert.ToString(GetRAM1);
-                    conn.Close();
-                    conn.Open();
-                    SqlCommand cmd11 = new SqlCommand("select RAM2 from dbo.MayTinh where MaMT = '" + dtgHD.Rows[i].Cells[3].Value.ToString() + "'", conn);
-                    object GetRAM2 = cmd11.ExecuteScalar();
-                    string RAM2 = Convert.ToString(GetRAM2);
-                    conn.Close();
-                    conn.Open();
-                    SqlCommand cmd12 = new SqlCommand("select Card from dbo.MayTinh where MaMT = '" + dtgHD.Rows[i].Cells[3].Value.ToString() + "'", conn);
-                    object GetCard = cmd12.ExecuteScalar();
-                    string Card = Convert.ToString(GetCard);
-                    conn.Close();
-                    conn.Open();
-                    SqlCommand cmd13 = new SqlCommand("select ManHinh from dbo.MayTinh where MaMT = '" + dtgHD.Rows[i].Cells[3].Value.ToString() + "'", conn);
-                    object GetManHinh = cmd13.ExecuteScalar();
-                    string ManHinh = Convert.ToString(GetManHinh);
-                    conn.Close();
-                    conn.Open();
-                    SqlCommand cmd14 = new SqlCommand("select DungLuong from dbo.MayTinh where MaMT = '" + dtgHD.Rows[i].Cells[3].Value.ToString() + "'", conn);
-                    object GetDungLuong = cmd14.ExecuteScalar();
-                    string DungLuong = Convert.ToString(GetDungLuong);
-                    conn.Close();
+                    string LoaiHang = Convert.ToString(f.Select_GetValue("LoaiHang","MayTinh","MaMT", dtgHD.Rows[i].Cells[3].Value.ToString()));
+                    string BaoHanh = Convert.ToString(f.Select_GetValue("BaoHanh", "MayTinh", "MaMT", dtgHD.Rows[i].Cells[3].Value.ToString()));
+                    string CPU = Convert.ToString(f.Select_GetValue("CPU", "MayTinh", "MaMT", dtgHD.Rows[i].Cells[3].Value.ToString()));
+                    string RAM1 = Convert.ToString(f.Select_GetValue("RAM1", "MayTinh", "MaMT", dtgHD.Rows[i].Cells[3].Value.ToString()));
+                    string RAM2 = Convert.ToString(f.Select_GetValue("RAM2", "MayTinh", "MaMT", dtgHD.Rows[i].Cells[3].Value.ToString()));
+                    string Card = Convert.ToString(f.Select_GetValue("Card", "MayTinh", "MaMT", dtgHD.Rows[i].Cells[3].Value.ToString()));
+                    string ManHinh = Convert.ToString(f.Select_GetValue("ManHinh", "MayTinh", "MaMT", dtgHD.Rows[i].Cells[3].Value.ToString()));
+                    string DungLuong = Convert.ToString(f.Select_GetValue("DungLuong", "MayTinh", "MaMT", dtgHD.Rows[i].Cells[3].Value.ToString()));
                     ThongTin.PutValue(row, 0, dtgHD.Rows[i].Cells[3].Value.ToString());
                     ThongTin.PutValue(row, 1, dtgHD.Rows[i].Cells[4].Value.ToString());
                     ThongTin.PutValue(row, 2, LoaiHang +", "+CPU+", "+RAM1+"+"+RAM2+", "+Card+", "+ManHinh+", "+DungLuong);
@@ -518,29 +383,27 @@ namespace DoAn
                 TienThanhToan = TongSoTien * GiamGia;
                 HoaDon.MailMerge.Execute(new[] { "Thanh_Toan" }, new[] { TienThanhToan.ToString() });
                 HoaDon.SaveAndOpenFile("HoaDon.doc");
-                conn.Open();
-                SqlCommand cmd16 = new SqlCommand("update dbo.KhachHang set DiemThanThiet = "+ DiemThanThiet+"where MaKH = '" + dtgHD.Rows[0].Cells[1].Value.ToString() + "'", conn);
-                cmd16.ExecuteNonQuery();
-                conn.Close();
+                string[] field = { "DiemThanThiet" };
+                SqlParameter[] parameter = new SqlParameter[]
+                {
+                    new SqlParameter("@1",DiemThanThiet)
+                };
+                string[] fieldCondition = { "MaKH" };
+                SqlParameter[] parameterCondition = new SqlParameter[]
+                {
+                    new SqlParameter("@2",dtgHD.Rows[0].Cells[1].Value.ToString())
+                };
+                f.UpdateDataTable("KhachHang",field,parameter,fieldCondition,parameterCondition);
             }
             else
             {
                 MessageBox.Show("Chưa nhập thông tin hóa đơn", "Thông Báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
         }
-
         private void dtpHD_ValueChanged(object sender, EventArgs e)
         {
             dtgHD.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            string QuerrySelect = "select * from dbo.HoaDon where NgayBan = '" + dtpHD.Text + "'";
-            conn.Open();
-            SqlCommand cmd = new SqlCommand(QuerrySelect, conn);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dtgHD.DataSource = dt;
-            conn.Close();
+            dtgHD.DataSource = f.ReadData("HoaDon","NgayBan",dtpHD.Text);
             btnThemHD.Enabled = false;
             btnSuaHD.Enabled = false;
             btnXoaHD.Enabled = false;
@@ -586,32 +449,13 @@ namespace DoAn
                 BaoCao.SaveAndOpenFile("DoanhThu.doc");
             }
         }
-
-        private void txtMaHD_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void txtMaKH_TextChanged(object sender, EventArgs e)
         {
-            conn.Open();
-            SqlCommand cmd3 = new SqlCommand("select MaKH from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'", conn);
-            SqlDataReader dta1 = cmd3.ExecuteReader();
-            if (dta1.Read())
+            if (f.Select_TblCheck("MaKH","KhachHang","MaKH",txtMaKH.Text))
             {
-            conn.Close();
-            conn.Open();
-            string QuerrySelectDiemTT = "select DiemThanThiet from dbo.KhachHang where MaKH = '" + txtMaKH.Text + "'";
-            SqlCommand cmd = new SqlCommand(QuerrySelectDiemTT, conn);
-            object GetDiemTT = cmd.ExecuteScalar();
-            string DiemTT = Convert.ToString(GetDiemTT);
-            conn.Close();
+            string DiemTT = Convert.ToString(f.Select_GetValue("DiemThanThiet","KhachHang","MaKH",txtMaKH.Text));
             txtDiemTT.Text = DiemTT;
             }
-            else
-            {
-            conn.Close();
-            }    
         }
     }
 }

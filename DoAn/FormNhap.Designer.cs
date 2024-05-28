@@ -82,7 +82,6 @@
             // 
             // timer1
             // 
-            timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // panel2
             // 
@@ -412,7 +411,6 @@
             this.label2.Size = new System.Drawing.Size(164, 26);
             this.label2.TabIndex = 0;
             this.label2.Text = "Ngày làm phiếu:";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label1
             // 
@@ -451,7 +449,6 @@
             this.dtgPhieuNhap.Size = new System.Drawing.Size(1191, 885);
             this.dtgPhieuNhap.TabIndex = 4;
             this.dtgPhieuNhap.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgPhieuNhap_CellClick);
-            this.dtgPhieuNhap.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgPhieuNhap_CellContentClick);
             // 
             // clnMPN
             // 

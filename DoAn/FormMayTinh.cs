@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Aspose.Words.Fields;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,8 +17,8 @@ namespace DoAn
 {
     public partial class FormMayTinh : Form
     {
-        SqlConnection conn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\PC\source\repos\QuanLyMayTinh\DoAn\DatabaseQuanLy.mdf;Integrated Security=True");
         bool CheckClickBtnSua = false;
+        Functions f = new Functions();
         public FormMayTinh()
         {
 
@@ -34,13 +35,6 @@ namespace DoAn
             btnSuaMT.Enabled = false;
         }
         bool checkError = false;
-        public void ErrorWarning(ErrorProvider error ,TextBox txt, string  message)
-        {
-            error.SetError(txt, message);
-            txt.Focus();
-            checkError = true;
-            conn.Close();
-        }
         public void CheckInputTxt()
         {
             double sothuc = 0.0;
@@ -48,15 +42,18 @@ namespace DoAn
             
             if (txtMaMayTinh.Text == "")    
             {
-                ErrorWarning(errorProvider1, txtMaMayTinh, "Chưa nhập mã máy tính");
+                f.ErrorWarning(errorProvider1, txtMaMayTinh, "Chưa nhập mã máy tính");
+                checkError = true;
             }
             else if (txtTenMayTinh.Text == "")
             {
-                ErrorWarning(errorProvider1, txtTenMayTinh, "Chưa nhập tên máy tính");
+                f.ErrorWarning(errorProvider1, txtTenMayTinh, "Chưa nhập tên máy tính");
+                checkError = true;
             }
             else if (txtTenHSX.Text == "")
             {
-                ErrorWarning(errorProvider1, txtTenHSX, "Chưa nhập tên hãng sản xuất");
+                f.ErrorWarning(errorProvider1, txtTenHSX, "Chưa nhập tên hãng sản xuất");
+                checkError = true;
             }
             else if (cboLoaiHang.Text == "none")
             {
@@ -65,23 +62,33 @@ namespace DoAn
             }
             else if (txtNamRaMat.Text == "")
             {
-                ErrorWarning(errorProvider1, txtNamRaMat, "Chưa nhập năm ra mắt");
+                f.ErrorWarning(errorProvider1, txtNamRaMat, "Chưa nhập năm ra mắt");
+                checkError = true;
+
             }
             else if (int.TryParse(txtNamRaMat.Text, out songuyen) == false || int.Parse(txtNamRaMat.Text) < 2005)
             {
-                ErrorWarning(errorProvider1, txtNamRaMat, "Sai định dạng năm ra mắt");
+                f.ErrorWarning(errorProvider1, txtNamRaMat, "Sai định dạng năm ra mắt");
+                checkError = true;
+
             }
             else if (txtBaoHanh.Text == "")
             {
-                ErrorWarning(errorProvider1, txtBaoHanh, "Chưa nhập bảo hành");
+                f.ErrorWarning(errorProvider1, txtBaoHanh, "Chưa nhập bảo hành");
+                checkError = true;
+
             }
             else if (int.TryParse(txtBaoHanh.Text, out songuyen) == false || int.Parse(txtBaoHanh.Text) < 0)
             {
-                ErrorWarning(errorProvider1, txtBaoHanh, "Sai định dạng tháng bảo hành");
+                f.ErrorWarning(errorProvider1, txtBaoHanh, "Sai định dạng tháng bảo hành");
+                checkError = true;
+
             }
             else if (txtCPU.Text == "")
             {
-                ErrorWarning(errorProvider1, txtCPU, "Chưa nhập thông số CPU");
+                f.ErrorWarning(errorProvider1, txtCPU, "Chưa nhập thông số CPU");
+                checkError = true;
+
             }
             else if (cboRAM1.Text == "none" && cboRAM2.Text == "none")
             {
@@ -90,23 +97,33 @@ namespace DoAn
             }
             else if (txtCard.Text == "")
             {
-                ErrorWarning(errorProvider1, txtCard, "Chưa nhập thông số Card");
+                f.ErrorWarning(errorProvider1, txtCard, "Chưa nhập thông số Card");
+                checkError = true;
+
             }
             else if (txtManHinh.Text == "")
             {
-                ErrorWarning(errorProvider1, txtManHinh, "Chưa nhập thông số màn hình");
+                f.ErrorWarning(errorProvider1, txtManHinh, "Chưa nhập thông số màn hình");
+                checkError = true;
+
             }
             else if (txtDungLuong.Text == "")
             {
-                ErrorWarning(errorProvider1, txtDungLuong, "Chưa nhập dung lượng");
+                f.ErrorWarning(errorProvider1, txtDungLuong, "Chưa nhập dung lượng");
+                checkError = true;
+
             }
             else if (txtTrongLuong.Text == "")
             {
-                ErrorWarning(errorProvider1, txtTrongLuong, "Chưa nhập trọng lượng");
+                f.ErrorWarning(errorProvider1, txtTrongLuong, "Chưa nhập trọng lượng");
+                checkError = true;
+
             }
             else if (double.TryParse(txtTrongLuong.Text, out sothuc) == false || double.Parse(txtTrongLuong.Text) < 0)
             {
-                ErrorWarning(errorProvider1, txtTrongLuong, "Sai định dạng trọng lượng");
+                f.ErrorWarning(errorProvider1, txtTrongLuong, "Sai định dạng trọng lượng");
+                checkError = true;
+
             }
             else if (cboTinhTrang.Text == "none")
             {
@@ -115,11 +132,15 @@ namespace DoAn
             }
             else if (txtDonGia.Text == "")
             {
-                ErrorWarning(errorProvider1, txtDonGia, "Chưa nhập đơn giá");
+                f.ErrorWarning(errorProvider1, txtDonGia, "Chưa nhập đơn giá");
+                checkError = true;
+
             }
             else if (double.TryParse(txtDonGia.Text, out sothuc) == false || double.Parse(txtDonGia.Text) < 0)
             {
-                ErrorWarning(errorProvider1, txtDonGia, "Sai định dạng đơn giá");
+                f.ErrorWarning(errorProvider1, txtDonGia, "Sai định dạng đơn giá");
+                checkError = true;
+
             }
         }
         public void ResetTextBox()
@@ -149,34 +170,35 @@ namespace DoAn
             CheckInputTxt();
             if (!checkError)
             {
-                conn.Open();
-                string QuerryCheckMa = "select MaMT from dbo.MayTinh where MaMT = '" + txtMaMayTinh.Text + "'";
-                SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                SqlDataReader dta = cmd.ExecuteReader();
-                if (dta.Read() == true)
+                if (f.Select_TblCheck("MaMT","MayTinh","MaMT",txtMaMayTinh.Text))
                 {
-                    ErrorWarning(errorProvider1, txtMaMayTinh, "Mã máy tính đã tồn tại");
-                    conn.Close();
+                    f.ErrorWarning(errorProvider1, txtMaMayTinh, "Mã máy tính đã tồn tại");
                 }
                 else
                 {
-                    conn.Close();
-                    conn.Open();
-                    string QuerryInsert = "insert into dbo.MayTinh(MaMT,TenMT,TenHSX,LoaiHang,BaoHanh,NamRaMat,CPU,RAM1,RAM2,ManHinh,DungLuong,TrongLuong,DonGia,GhiChu,Card,TinhTrang)" +
-                        "values ('" + txtMaMayTinh.Text + "',N'" + txtTenMayTinh.Text + "',N'" + txtTenHSX.Text + "',N'" + cboLoaiHang.Text + "'," + int.Parse(txtBaoHanh.Text) + "," + int.Parse(txtNamRaMat.Text)
-                        + ",N'" + txtCPU.Text + "','" + cboRAM1.Text + "','" + cboRAM2.Text + "',N'" + txtManHinh.Text + "','" + txtDungLuong.Text + "'," + double.Parse(txtTrongLuong.Text) + "," + double.Parse(txtDonGia.Text) + ",N'" + txtGhiChu.Text + "',N'"+txtCard.Text+"',N'"+cboTinhTrang.Text+"')";
-                    SqlCommand cmd1 = new SqlCommand(QuerryInsert, conn);
-                    cmd1.ExecuteNonQuery();
-                    conn.Close();
+                    SqlParameter[] parameterMayTinh = new SqlParameter[]
+                    {
+                        new SqlParameter("@1",txtMaMayTinh.Text),
+                        new SqlParameter("@2",txtTenMayTinh.Text),
+                        new SqlParameter("@3",txtTenHSX.Text),
+                        new SqlParameter("@4",cboLoaiHang.Text),
+                        new SqlParameter("@5",int.Parse(txtBaoHanh.Text)),
+                        new SqlParameter("@6",int.Parse(txtNamRaMat.Text)),
+                        new SqlParameter("@7",txtCPU.Text),
+                        new SqlParameter("@8",cboRAM1.Text),
+                        new SqlParameter("@9",cboRAM2.Text),
+                        new SqlParameter("@10",txtManHinh.Text),
+                        new SqlParameter("@11",txtDungLuong.Text),
+                        new SqlParameter("@12",double.Parse(txtTrongLuong.Text)),
+                        new SqlParameter("@13",double.Parse(txtDonGia.Text)),
+                        new SqlParameter("@14",txtGhiChu.Text),
+                        new SqlParameter("@15",txtCard.Text),
+                        new SqlParameter("@16",cboTinhTrang.Text)
+                    };
+
+                    f.InsertDataIntoTable("MayTinh(MaMT,TenMT,TenHSX,LoaiHang,BaoHanh,NamRaMat,CPU,RAM1,RAM2,ManHinh,DungLuong,TrongLuong,DonGia,GhiChu,Card,TinhTrang)", parameterMayTinh);
                     ResetTextBox();
-                    conn.Open();
-                    string QuerrySelect = "select *  from dbo.MayTinh";
-                    SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
-                    SqlDataAdapter da = new SqlDataAdapter(cmd2);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dtgMayTinh.DataSource = dt;
-                    conn.Close();
+                    dtgMayTinh.DataSource = f.ReadData("MayTinh","1","1");
                 }
             }    
         }
@@ -192,33 +214,40 @@ namespace DoAn
                 if(checkClickdtg)
                 {
                 checkClickdtg = false;
-                conn.Open();
-                string QuerryCheckMa = "select MaMT from dbo.MayTinh where MaMT = '" + txtMaMayTinh.Text + "'";
-                SqlCommand cmd = new SqlCommand(QuerryCheckMa, conn);
-                SqlDataReader dta = cmd.ExecuteReader();
-                if (dta.Read() == true && txtMaMayTinh.Text != dtgMayTinh.Rows[numrow].Cells[0].Value.ToString())
+                if (f.Select_TblCheck("MaMT","MayTinh","MaMT",txtMaMayTinh.Text) && txtMaMayTinh.Text != dtgMayTinh.Rows[numrow].Cells[0].Value.ToString())
                 {
-                    ErrorWarning(errorProvider1, txtMaMayTinh, "Mã máy tính đã tồn tại");
-                    conn.Close();
+                    f.ErrorWarning(errorProvider1, txtMaMayTinh, "Mã máy tính đã tồn tại");
                 }
                 else
                 {
-                conn.Close();
-                conn.Open();
-                string QuerryUpdate = " Update dbo.MayTinh set MaMT = N'" + txtMaMayTinh.Text + "',TenMT = N'" + txtTenMayTinh.Text + "',TenHSX = N'"+ txtTenHSX.Text +"',LoaiHang = N'"+cboLoaiHang.Text+"',BaoHanh = "+int.Parse(txtBaoHanh.Text)+",NamRaMat =" +
-              int.Parse(txtNamRaMat.Text) + ",CPU = N'"+txtCPU.Text+"',RAM1 = '"+ cboRAM1.Text+"',RAM2 = '"+cboRAM2.Text+"', ManHinh = '"+txtManHinh.Text+"',DungLuong = '" + txtDungLuong.Text +"',TrongLuong = "+ double.Parse(txtTrongLuong.Text)+",DonGia ="+
-            double.Parse(txtDonGia.Text)+",GhiChu = N'" +txtGhiChu.Text+"',Card =N'"+txtCard.Text+"',TinhTrang = N'"+cboTinhTrang.Text+"' where  MaMT = N'" + dtgMayTinh.Rows[numrow].Cells[0].Value.ToString() + "'" ;
-                SqlCommand cmd1 = new SqlCommand(QuerryUpdate, conn);
-                cmd1.ExecuteNonQuery();
-                conn.Close();
-                    conn.Open();
-                    string QuerrySelect = "select *  from dbo.MayTinh";
-                    SqlCommand cmd2 = new SqlCommand(QuerrySelect, conn);
-                    SqlDataAdapter da = new SqlDataAdapter(cmd2);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    dtgMayTinh.DataSource = dt;
-                    conn.Close();
+                        string[] field = { "MaMT", "TenMT", "TenHSX", "LoaiHang", "BaoHanh", "NamRaMat", "CPU", "RAM1", "RAM2", "ManHinh", "DungLuong", "TrongLuong", "DonGia", "GhiChu", "Card", "TinhTrang" };
+                        SqlParameter[] parameter = new SqlParameter[]
+                        {
+                            new SqlParameter("@1",txtMaMayTinh.Text),
+                            new SqlParameter("@2",txtTenMayTinh.Text),
+                            new SqlParameter("@3",txtTenHSX.Text),
+                            new SqlParameter("@4",cboLoaiHang.Text),
+                            new SqlParameter("@5",int.Parse(txtBaoHanh.Text)),
+                            new SqlParameter("@6",int.Parse(txtNamRaMat.Text)),
+                            new SqlParameter("@7",txtCPU.Text),
+                            new SqlParameter("@8",cboRAM1.Text),
+                            new SqlParameter("@9",cboRAM2.Text),
+                            new SqlParameter("@10",txtManHinh.Text),
+                            new SqlParameter("@11",txtDungLuong.Text),
+                            new SqlParameter("@12",double.Parse(txtTrongLuong.Text)),
+                            new SqlParameter("@13",double.Parse(txtDonGia.Text)),
+                            new SqlParameter("@14",txtGhiChu.Text),
+                            new SqlParameter("@15",txtCard.Text),
+                            new SqlParameter("@16",cboTinhTrang.Text)
+                        };
+                        string[] fieldCondition = {"MaMT"};
+                        SqlParameter[] parameterConditon = new SqlParameter[]
+                        {
+                            new SqlParameter("@17",dtgMayTinh.Rows[numrow].Cells[0].Value.ToString())
+                        };
+
+                        f.UpdateDataTable("MayTinh", field, parameter, fieldCondition, parameterConditon);
+                    dtgMayTinh.DataSource = f.ReadData("MayTinh", "1", "1");
                 }
                 }
                 else
@@ -239,44 +268,15 @@ namespace DoAn
         }
         public void clear_whitespace()
         {
-            txtMaMayTinh.Text = txtMaMayTinh.Text.Trim();
-            txtTenMayTinh.Text = txtTenMayTinh.Text.Trim();
-            txtTenHSX.Text = txtTenHSX.Text.Trim();
-            txtNamRaMat.Text = txtNamRaMat.Text.Trim();
-            txtBaoHanh.Text = txtBaoHanh.Text.Trim();
-            txtCard.Text = txtCard.Text.Trim();
-            txtCPU.Text = txtCPU.Text.Trim();
-            txtManHinh.Text = txtManHinh.Text.Trim();
-            txtDungLuong.Text = txtDungLuong.Text.Trim();
-            txtTrongLuong.Text = txtTrongLuong.Text.Trim();
-            txtDonGia.Text = txtDonGia.Text.Trim();
-            txtGhiChu.Text = txtGhiChu.Text.Trim();
-            Regex trimmer = new Regex(@"\s\s+"); // Xoá khoảng trắng thừa trong chuỗi 
-            txtMaMayTinh.Text = trimmer.Replace(txtMaMayTinh.Text, " ");
-            txtTenMayTinh.Text = trimmer.Replace(txtTenMayTinh.Text, " "); 
-            txtTenHSX.Text = trimmer.Replace(txtTenHSX.Text, " ");
-            txtNamRaMat.Text = trimmer.Replace(txtNamRaMat.Text, " ");
-            txtBaoHanh.Text = trimmer.Replace(txtBaoHanh.Text, " ");
-            txtCPU.Text = trimmer.Replace(txtCPU.Text, " ");
-            txtCard.Text = trimmer.Replace(txtCard.Text, " ");
-            txtManHinh.Text = trimmer.Replace(txtManHinh.Text, " ");
-            txtDungLuong.Text = trimmer.Replace(txtDungLuong.Text, " ");
-            txtTrongLuong.Text = trimmer.Replace(txtTrongLuong.Text, " ");
-            txtDonGia.Text = trimmer.Replace(txtDonGia.Text, " ");
-            txtGhiChu.Text = trimmer.Replace(txtGhiChu.Text, " ");
+            TextBox[] txt = { txtMaMayTinh, txtTenMayTinh, txtTenHSX, txtNamRaMat, txtBaoHanh, txtCard, txtCPU, txtManHinh, txtDungLuong, txtTrongLuong, txtDonGia, txtGhiChu};
+            f.clear_whitespace(txt);
+
         }
         private void FormMayTinh_Load(object sender, EventArgs e)
         {
             pnMayTinh.Visible = false;
             dtgMayTinh.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            conn.Open();
-            string QuerrySelect = "select *  from dbo.MayTinh";
-            SqlCommand cmd = new SqlCommand(QuerrySelect, conn);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dtgMayTinh.DataSource = dt;
-            conn.Close();
+            dtgMayTinh.DataSource = f.ReadData("MayTinh", "1", "1");
         }
 
         private void btnSuaMT_Click(object sender, EventArgs e)
@@ -295,19 +295,13 @@ namespace DoAn
             {
 
                 checkClickdtg = false;
-                conn.Open();
-                string QuerryDelete = "delete from  dbo.MayTinh where  MaMT = N'" + dtgMayTinh.Rows[numrow].Cells[0].Value.ToString() + "'";
-                SqlCommand cmd = new SqlCommand(QuerryDelete, conn);
-                cmd.ExecuteNonQuery();
-                conn.Close();
-                string QuerrySelect = "select *  from dbo.MayTinh";
-                conn.Open();
-                SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
-                SqlDataAdapter da = new SqlDataAdapter(cmd1);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                dtgMayTinh.DataSource = dt;
-                conn.Close();
+                string[] fieldCondition = { "MaMT" };
+                SqlParameter[] parameterCondition = new SqlParameter[]
+                {
+                    new SqlParameter("@1",dtgMayTinh.Rows[numrow].Cells[0].Value.ToString())
+                };
+                f.DeleteDataTable("MayTinh", fieldCondition, parameterCondition);
+                dtgMayTinh.DataSource = f.ReadData("MayTinh", "1", "1");
             }
             else
             {
@@ -319,12 +313,6 @@ namespace DoAn
         {
             pnInputSearch.Visible = true;
         }
-
-        private void dtgMayTinh_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            
-        }
-
         int numrow;
         bool checkClickdtg = false;
         private void dtgMayTinh_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -352,11 +340,6 @@ namespace DoAn
             checkClickdtg = true;
 
         }
-        private void txtMaMayTinh_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void txtTimKiem_TextChanged(object sender, EventArgs e)
         {
             if(txtTimKiem.Text!="")
@@ -367,29 +350,12 @@ namespace DoAn
                 {
                 lblTimKiem.Visible = true;
             }
-            string QuerrySelect = "select *  from dbo.MayTinh where MaMT LIKE '%" + txtTimKiem.Text + "%'" +
-               "or TenMT LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or TenHSX LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or LoaiHang LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or BaoHanh LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or NamRaMat LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or CPU LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or RAM1 LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or RAM2 LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or ManHinh LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or DungLuong LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or TrongLuong LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or DonGia LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or GhiChu LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or TinhTrang LIKE N'%" + txtTimKiem.Text + "%'" +
-               "or Card LIKE N'%" + txtTimKiem.Text + "%'";
-            conn.Open();
-            SqlCommand cmd1 = new SqlCommand(QuerrySelect, conn);
-            SqlDataAdapter da = new SqlDataAdapter(cmd1);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dtgMayTinh.DataSource = dt;
-            conn.Close();
+            string[] fieldCondition = { "MaMT", "TenMT", "TenHSX", "LoaiHang", "BaoHanh", "NamRaMat", "CPU", "RAM1", "RAM2", "ManHinh", "DungLuong", "TrongLuong", "DonGia", "GhiChu", "TinhTrang", "Card" };
+            SqlParameter[] parameterCondition = new SqlParameter[]
+            {
+                new SqlParameter("@1","%" + txtTimKiem.Text+ "%")
+            };
+            dtgMayTinh.DataSource = f.SelectCondition("MayTinh",fieldCondition,parameterCondition);
         }
 
         private void lblTimKiem_Click(object sender, EventArgs e)
@@ -415,38 +381,28 @@ namespace DoAn
             pnInputSearch.Visible = false;
             FormMayTinh_Load(sender, e);
         }
-        public void SelectCondition(string QuerrySelect)
-        {
-            conn.Open();
-            SqlCommand cmd = new SqlCommand(QuerrySelect, conn);
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dtgMayTinh.DataSource = dt;
-            conn.Close();
-        }
-        private void cbLietKe_SelectedIndexChanged(object sender, EventArgs e)
+        private void cbLietKe_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             int a = cbLietKe.SelectedIndex;
-            switch(a)
+            switch (a)
             {
                 case 0:
                     FormMayTinh_Load(sender, e);
                     break;
                 case 1:
-                    SelectCondition("select * from dbo.MayTinh where DonGia < 10000000");
+                    dtgMayTinh.DataSource = f.Select("select * from dbo.MayTinh where DonGia < 10000000");
                     break;
                 case 2:
-                    SelectCondition("select * from dbo.MayTinh where DonGia between 10000000 and 15000000");
+                    dtgMayTinh.DataSource = f.Select("select * from dbo.MayTinh where DonGia between 10000000 and 15000000");
                     break;
                 case 3:
-                    SelectCondition("select * from dbo.MayTinh where DonGia between 15000000 and 20000000");
+                    dtgMayTinh.DataSource = f.Select("select * from dbo.MayTinh where DonGia between 15000000 and 20000000");
                     break;
                 case 4:
-                    SelectCondition("select * from dbo.MayTinh where DonGia between 20000000 and 30000000");
+                    dtgMayTinh.DataSource = f.Select("select * from dbo.MayTinh where DonGia between 20000000 and 30000000");
                     break;
                 case 5:
-                    SelectCondition("select * from dbo.MayTinh where DonGia > 30000000");
+                    dtgMayTinh.DataSource = f.Select("select * from dbo.MayTinh where DonGia > 30000000");
                     break;
             }
 
